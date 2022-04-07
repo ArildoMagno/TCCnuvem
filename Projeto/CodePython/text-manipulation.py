@@ -3,8 +3,6 @@
 
 # imports
 import spacy
-import nltk
-
 
 # configure
 spacy.prefer_gpu()
@@ -23,15 +21,17 @@ def tokenization_and_part_of_speech(text):
     for token in doc:
         # remove stop-words e pontuação e espaços
         # faz a lematizacao
-        if token == "uma":
-            print("examina")
 
-        if token not in all_stop_words and token.tag_ != "PUNCT" and token.tag_ != "SPACE":
+        if token.text not in all_stop_words and token.tag_ != "PUNCT" and token.tag_ != "SPACE":
             words_pos.append((token, token.tag_, token.lemma_))
     return words_pos
 
 
-text = read_text("text-example.txt")
-# fem = (Palavra, Tag, Lema)
-fem = tokenization_and_part_of_speech(text)
-print("Pos-Tagging:", fem)
+def execute():
+    text = read_text("text-example.txt")
+    # fem = (Palavra, Tag, Lema)
+    fem = tokenization_and_part_of_speech(text)
+    print("Pos-Tagging:", fem)
+
+
+execute()
