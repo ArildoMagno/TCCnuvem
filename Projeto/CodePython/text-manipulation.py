@@ -40,13 +40,12 @@ def execute():
 
 def search_synsets(word_source):
     synset_word = wn.synsets(word_source)
-    all_synsets_from_word = []
+
+    print("From: ", word_source)
     for word in synset_word:
-        for item in word.lemmas():
-            if item not in all_synsets_from_word:
-                all_synsets_from_word.append(item)
-
-    print("Sinonimos para", word_source, ":\n", all_synsets_from_word)
+        word_syn = wn.synset(word.id)
+        print('syn-lemmas: ', word_syn.lemmas())
 
 
-search_synsets('apple')
+
+search_synsets('homem')
