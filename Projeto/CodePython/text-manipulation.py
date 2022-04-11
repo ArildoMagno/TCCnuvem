@@ -3,8 +3,11 @@
 
 # imports
 import spacy
+import wn
 
 # configure
+# adiciona o banco lexico xml na lib wn
+# wn.add('banco-own-pt/own-pt-lmf.xml')
 spacy.prefer_gpu()
 nlp = spacy.load("pt_core_news_lg")
 all_stop_words = nlp.Defaults.stop_words
@@ -31,7 +34,19 @@ def execute():
     text = read_text("text-example.txt")
     # fem = (Palavra, Tag, Lema)
     fem = tokenization_and_part_of_speech(text)
-    print("Pos-Tagging:", fem)
+    for fprint in fem:
+        print(fprint)
 
 
-execute()
+def search_synsets(word_source):
+    synset_word = wn.synsets(word_source)
+    all_synsets_from_word = []
+    for word in synset_word:
+        for item in word.lemmas():
+            if item not in all_synsets_from_word:
+                all_synsets_from_word.append(item)
+
+    print("Sinonimos para", word_source, ":\n", all_synsets_from_word)
+
+
+search_synsets('apple')
