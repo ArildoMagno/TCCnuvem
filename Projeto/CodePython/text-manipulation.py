@@ -52,13 +52,27 @@ def calculate_similarity_between_sets(set1, set2):
     return similar_sets
 
 
+def tokenization_lematization_stopwordsremoval(text):
+    doc = nlp(text)
+    words_pos = []
+    for token in doc:
+        if token.text not in all_stop_words and token.lemma_ not in all_stop_words \
+                and token.tag_ != "PUNCT" and token.tag_ != "SPACE" \
+                and token.lemma_ not in words_pos:
+            words_pos.append(token.lemma_)
+    return words_pos
+
+
 def execute():
     doc_input1 = read_text("text-example1.txt")
     doc_input2 = read_text("text-example2.txt")
     n_gram = 3
     # tokenizacao e segmentacao do texto
-    doc_segmented1 = ngrams(doc_input1.split(), n_gram)
-    doc_segmented2 = ngrams(doc_input2.split(), n_gram)
+    doc_tokenized_lematized_nostopwords1 = tokenization_lematization_stopwordsremoval(doc_input1)
+    doc_tokenized_lematized_nostopwords2 = tokenization_lematization_stopwordsremoval(doc_input2)
+
+    doc_segmented1 = ngrams(doc_tokenized_lematized_nostopwords1, n_gram)
+    doc_segmented2 = ngrams(doc_tokenized_lematized_nostopwords2, n_gram)
     similarity_between_docs = calculate_similarity_between_docs(doc_segmented1, doc_segmented2)
     if len(similarity_between_docs) > 0:
         print("Documentos similaries em:\n", similarity_between_docs)
