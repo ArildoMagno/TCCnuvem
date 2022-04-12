@@ -1,12 +1,9 @@
-# Usando Spacy para POS
-# Usando NLTK para Tokenizacao
-
-# imports
 import spacy
 import wn
+from wn.similarity import wup
+from itertools import product
 
 # configure
-# adiciona o banco lexico xml na lib wn
 # wn.add('banco-own-pt/own-pt-lmf.xml')
 spacy.prefer_gpu()
 nlp = spacy.load("pt_core_news_lg")
@@ -18,34 +15,59 @@ def read_text(text):
     return text
 
 
-def tokenization_and_part_of_speech(text):
-    doc = nlp(text)
-    words_pos = []
-    for token in doc:
-        # remove stop-words e pontuação e espaços
-        # faz a lematizacao
-        if token.text not in all_stop_words and token.tag_ != "PUNCT" and token.tag_ != "SPACE":
-            words_pos.append((token.text, token.lemma_, token.tag_))
-    return words_pos
+def calculate_wu_palmer_similarity(word1, word2):
+    synset1 = wn.synsets(word1)
+    synset2 = wn.synsets(word2)
+    high_similar_words = []
+    similar_words = []
+
+    for sense1, sense2 in product(synset1, synset2):
+        if sense1.pos == sense2.pos:
+            d = wup(sense1, sense2, True)
+            similar_words.append((d, sense1, sense2))
+
+    if len(similar_words) > 0:
+        high_similar_words = max(similar_words, key=lambda item: item[0])
+
+    return high_similar_words
+
+
+def calculate_similarity_between_docs(doc_segmented1, doc_segmented2):
+    similar_sets = []
+    for set1, set2 in product(doc_segmented1, doc_segmented2):
+        temp_similar_sets = calculate_similarity_between_sets(set1, set2)
+        if len(temp_similar_sets) > 0:
+            similar_sets.append(temp_similar_sets)
+    return similar_sets
+
+
+def calculate_similarity_between_sets(set1, set2):
+    similar_sets = []
+    for word1, word2 in product(set1, set2):
+        similarity = calculate_wu_palmer_similarity(word1, word2)
+        # range para a similaridade
+        if len(similarity) > 0:
+            if similarity[0] > 0.85:
+                similar_sets.append(similarity)
+    return similar_sets
 
 
 def execute():
-    text = read_text("text-example.txt")
-    # fem = (Palavra, Tag, Lema)
-    # obs: mantem com a palavra para analisar usando o lema mas no final
-    # ter a referencia da palavra original
-    fem = tokenization_and_part_of_speech(text)
-    # segmentacao do texto
-    ngrams(fem, 5)
+    doc_input1 = read_text("text-example1.txt")
+    doc_input2 = read_text("text-example2.txt")
+    n_gram = 3
+    # tokenizacao e segmentacao do texto
+    doc_segmented1 = ngrams(doc_input1.split(), n_gram)
+    doc_segmented2 = ngrams(doc_input2.split(), n_gram)
+    similarity_between_docs = calculate_similarity_between_docs(doc_segmented1, doc_segmented2)
+    if len(similarity_between_docs) > 0:
+        print("Documentos similaries em:\n", similarity_between_docs)
+    else:
+        print("Documentos nada similares!")
 
-    for fprint in fem:
-        print(fprint)
 
-
-# conexao com o banco wordnet
 def search_synsets(word_source):
     synset_word = wn.synsets(word_source)
-
     print("From: ", word_source)
     for word in synset_word:
         word_syn = wn.synset(word.id)
