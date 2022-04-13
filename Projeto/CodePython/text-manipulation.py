@@ -10,6 +10,10 @@ nlp = spacy.load("pt_core_news_lg")
 all_stop_words = nlp.Defaults.stop_words
 
 
+# 1 - implementar PD
+# 2 - passar palavra original junto com o lema para mostrar na hora do print
+
+
 def read_text(text):
     text = open(text, "r").read()
     return text
@@ -18,38 +22,61 @@ def read_text(text):
 def calculate_wu_palmer_similarity(word1, word2):
     synset1 = wn.synsets(word1)
     synset2 = wn.synsets(word2)
-    high_similar_words = []
-    similar_words = []
+    value_similarity = 0
+    if len(synset1) > 0 and len(synset2) > 0:
+        synset1 = synset1[0]
+        synset2 = synset2[0]
+        if synset1.pos == synset2.pos:
+            value_similarity = wup(synset1, synset2, True)
 
-    for sense1, sense2 in product(synset1, synset2):
-        if sense1.pos == sense2.pos:
-            d = wup(sense1, sense2, True)
-            similar_words.append((d, sense1, sense2))
-
-    if len(similar_words) > 0:
-        high_similar_words = max(similar_words, key=lambda item: item[0])
-
-    return high_similar_words
+    return value_similarity
 
 
 def calculate_similarity_between_docs(doc_segmented1, doc_segmented2):
     similar_sets = []
-    for set1, set2 in product(doc_segmented1, doc_segmented2):
-        temp_similar_sets = calculate_similarity_between_sets(set1, set2)
-        if len(temp_similar_sets) > 0:
-            similar_sets.append(temp_similar_sets)
+    for set1 in doc_segmented1:
+        for set2 in doc_segmented2:
+            similar_sets_temp = calculate_similarity_between_sets(set1, set2)
+            similar_sets.append((calculate_similarity_between_sets(set1, set2), set1, set2))
+
+            # no lugar desse IF vai jogar para o PD(A,B)
+            # e se PD der True, já joga p saida a similaridade entre os conjuntos
+            if similar_sets_temp[0] > 0.7:
+                print("Similaridade de:", similar_sets_temp[0], " entre ", set1, set2)
+            if similar_sets_temp[1] > 0.7:
+                print("Similaridade de:", similar_sets_temp[1], " entre ", set1, set2)
     return similar_sets
+
+
+def plagiarism_detection_analyse():
+    print()
 
 
 def calculate_similarity_between_sets(set1, set2):
     similar_sets = []
-    for word1, word2 in product(set1, set2):
-        similarity = calculate_wu_palmer_similarity(word1, word2)
-        # range para a similaridade
-        if len(similarity) > 0:
-            if similarity[0] > 0.85:
-                similar_sets.append(similarity)
-    return similar_sets
+    anB = []
+    bmA = []
+    # algoritmo matematico descrito na secao 4.3.2
+
+    # anB: a1Bn, a2Bn, a3Bn
+    # calcula a relacao de cada elemento de a com todos os elementos do conjunto B
+    for word1 in set1:
+        temp_similarity = []
+        for word2 in set2:
+            temp_similarity.append(calculate_wu_palmer_similarity(word1, word2))
+        anB.append(max(temp_similarity))
+
+    # calcula a relacao de cada elemento de b com todos os elementos do conjunto A
+    for word2 in set2:
+        temp_similarity = []
+        for word1 in set1:
+            temp_similarity.append(calculate_wu_palmer_similarity(word2, word1))
+        bmA.append(max(temp_similarity))
+
+    # calcula a media, para ter a relação entre AB e BA
+    average_anB = sum(anB) / len(anB)
+    average_bmA = sum(bmA) / len(bmA)
+    return average_anB, average_bmA
 
 
 def tokenization_lematization_stopwordsremoval(text):
@@ -64,20 +91,17 @@ def tokenization_lematization_stopwordsremoval(text):
 
 
 def execute():
-    doc_input1 = read_text("text-example1.txt")
-    doc_input2 = read_text("text-example2.txt")
+    doc_input1 = read_text("texto1.txt")
+    doc_input2 = read_text("texto2.txt")
     n_gram = 3
-    # tokenizacao e segmentacao do texto
+    # FEm
     doc_tokenized_lematized_nostopwords1 = tokenization_lematization_stopwordsremoval(doc_input1)
     doc_tokenized_lematized_nostopwords2 = tokenization_lematization_stopwordsremoval(doc_input2)
-
     doc_segmented1 = ngrams(doc_tokenized_lematized_nostopwords1, n_gram)
     doc_segmented2 = ngrams(doc_tokenized_lematized_nostopwords2, n_gram)
-    similarity_between_docs = calculate_similarity_between_docs(doc_segmented1, doc_segmented2)
-    if len(similarity_between_docs) > 0:
-        print("Documentos similaries em:\n", similarity_between_docs)
-    else:
-        print("Documentos nada similares!")
+
+    calculate_similarity_between_docs(doc_segmented1, doc_segmented2)
+    print("end")
 
 
 def search_synsets(word_source):
