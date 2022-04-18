@@ -3,6 +3,8 @@ import wn
 from wn.similarity import wup
 
 # configure
+# wn.download('own-pt')
+# wn.remove('own-pt')
 # wn.add('banco-own-pt/own-pt-lmf.xml')
 spacy.prefer_gpu()
 nlp = spacy.load("pt_core_news_lg")
@@ -10,7 +12,7 @@ all_stop_words = nlp.Defaults.stop_words
 
 
 def read_text(text):
-    text = open(text, "r").read()
+    text = open(text, mode="r", encoding="utf-8").read()
     return text
 
 
@@ -18,11 +20,14 @@ def calculate_wu_palmer_similarity(word1, word2):
     synset1 = wn.synsets(word1)
     synset2 = wn.synsets(word2)
     value_similarity = 0
+    # Diferente duas palavras nao tem nenhuma similaridade com nao existir synset para a palavra
     if len(synset1) > 0 and len(synset2) > 0:
         synset1 = synset1[0]
         synset2 = synset2[0]
         if synset1.pos == synset2.pos:
             value_similarity = wup(synset1, synset2, True)
+    else:
+        return 500
     return value_similarity
 
 
@@ -69,21 +74,21 @@ def calculate_similarity_between_sets(set1, set2):
         for word2 in set2:
             # [1] = lemma
             temp_similarity.append(calculate_wu_palmer_similarity(word1[1], word2[1]))
-        anB.append(max(temp_similarity))
+
+        if not all(p == 500 for p in temp_similarity):
+            while 500 in temp_similarity: temp_similarity.remove(500)
+            anB.append(max(temp_similarity))
 
     # relacao de cada elemento de B com todos os elementos do conjunto A
     for word2 in set2:
         temp_similarity = []
         for word1 in set1:
             temp_similarity.append(calculate_wu_palmer_similarity(word2[1], word1[1]))
-        bmA.append(max(temp_similarity))
 
-    # relação entre AB e BA
-    # FIX BUG ANOTADO NO PAPEL SOBRE O CALCULO ENVOLVENDO CONJUNTOS VAZIOS
-    # ELES ESTAO INTERFERINDO NA MEDIA, E DEVEM SER DESCONSIDERADOS NOS CALCULOS
-    # QUANDO OS 0(zeros) VEEM POR MOTIVOS DO CONJUNTO ESTAR VAZIO
-    # DO CONTRARIO É ZERO DA SIMILARIDADE MESMO E NAO DE ESTAR VAZIO
-    # TRATAR ISSO NO MÉTODO CALCULATE WU PALMER
+        if not all(p == 500 for p in temp_similarity):
+            while 500 in temp_similarity: temp_similarity.remove(500)
+            bmA.append(max(temp_similarity))
+
     average_anB = sum(anB) / len(anB)
     average_bmA = sum(bmA) / len(bmA)
     if average_bmA == 0.8 or average_anB == 0.8:
