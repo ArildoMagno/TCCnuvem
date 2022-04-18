@@ -1,6 +1,7 @@
 import spacy
 import wn
 from wn.similarity import wup
+import constants
 
 # configure
 # wn.download('own-pt')
@@ -9,6 +10,8 @@ from wn.similarity import wup
 spacy.prefer_gpu()
 nlp = spacy.load("pt_core_news_lg")
 all_stop_words = nlp.Defaults.stop_words
+
+var_glob_qnt_sim = 0
 
 
 def read_text(text):
@@ -27,11 +30,12 @@ def calculate_wu_palmer_similarity(word1, word2):
         if synset1.pos == synset2.pos:
             value_similarity = wup(synset1, synset2, True)
     else:
-        return 500
+        return constants.SYNONYMGROUPNOTFOUND
     return value_similarity
 
 
 def calculate_similarity_between_docs(doc_segmented1, doc_segmented2):
+    global var_glob_qnt_sim
     similar_sets = []
     for set1 in doc_segmented1:
         for set2 in doc_segmented2:
@@ -42,6 +46,7 @@ def calculate_similarity_between_docs(doc_segmented1, doc_segmented2):
             if plagiarism_detection_analyse(similar_sets_temp[0], similar_sets_temp[1]):
                 sw1 = show_words_from_set(set1)
                 sw2 = show_words_from_set(set2)
+                var_glob_qnt_sim += 1
                 print("Similaridade:", round(similar_sets_temp[0], 2), " entre ", sw1, " do doc1 e", sw2, "do doc2")
     return similar_sets
 
@@ -75,8 +80,9 @@ def calculate_similarity_between_sets(set1, set2):
             # [1] = lemma
             temp_similarity.append(calculate_wu_palmer_similarity(word1[1], word2[1]))
 
-        if not all(p == 500 for p in temp_similarity):
-            while 500 in temp_similarity: temp_similarity.remove(500)
+        if not all(p == constants.SYNONYMGROUPNOTFOUND for p in temp_similarity):
+            while constants.SYNONYMGROUPNOTFOUND in temp_similarity: temp_similarity.remove(
+                constants.SYNONYMGROUPNOTFOUND)
             anB.append(max(temp_similarity))
 
     # relacao de cada elemento de B com todos os elementos do conjunto A
@@ -85,14 +91,13 @@ def calculate_similarity_between_sets(set1, set2):
         for word1 in set1:
             temp_similarity.append(calculate_wu_palmer_similarity(word2[1], word1[1]))
 
-        if not all(p == 500 for p in temp_similarity):
-            while 500 in temp_similarity: temp_similarity.remove(500)
+        if not all(p == constants.SYNONYMGROUPNOTFOUND for p in temp_similarity):
+            while constants.SYNONYMGROUPNOTFOUND in temp_similarity: temp_similarity.remove(
+                constants.SYNONYMGROUPNOTFOUND)
             bmA.append(max(temp_similarity))
 
     average_anB = sum(anB) / len(anB)
     average_bmA = sum(bmA) / len(bmA)
-    if average_bmA == 0.8 or average_anB == 0.8:
-        print()
     return average_anB, average_bmA
 
 
@@ -114,6 +119,13 @@ def ngrams(input_ngrams, n):
     return output
 
 
+def calculate_probability_plagiarism_documents(tam_doc1, tam_doc2):
+    global var_glob_qnt_sim
+    calc = (var_glob_qnt_sim / (tam_doc1 + tam_doc2)) * 100
+    calc = round(calc, 4)
+    return calc
+
+
 def execute():
     print("\nSimilariade (0~1) 0=Completamente diferentes, 1=Identicos ou Sinonimos\n\n")
     doc_input1 = read_text("text-example1.txt")
@@ -125,6 +137,8 @@ def execute():
     doc_segmented1 = ngrams(doc_tokenized_lematized_nostopwords1, n_gram)
     doc_segmented2 = ngrams(doc_tokenized_lematized_nostopwords2, n_gram)
     calculate_similarity_between_docs(doc_segmented1, doc_segmented2)
+    relacao_doc = calculate_probability_plagiarism_documents(len(doc_segmented1), len(doc_segmented2))
+    print("\nProbabilidade de Plagio entre estes Documentos:", str(relacao_doc) + "%")
 
 
 execute()
