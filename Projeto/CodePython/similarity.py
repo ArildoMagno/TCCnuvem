@@ -7,7 +7,7 @@ import constants
 # wn.remove('own-pt')
 # wn.add('banco-own-pt/own-pt-lmf.xml')
 
-var_glob_qnt_sim = 0
+var_glob_qnt_sim_vetor = []
 
 
 def calculate_wu_palmer_similarity(word1, word2):
@@ -26,8 +26,9 @@ def calculate_wu_palmer_similarity(word1, word2):
 
 
 def calculate_similarity_between_docs(doc_segmented1, doc_segmented2):
-    global var_glob_qnt_sim
+    global var_glob_qnt_sim_vetor
     similar_sets = []
+
     for set1 in doc_segmented1:
         for set2 in doc_segmented2:
             similar_sets_temp = calculate_similarity_between_sets(set1, set2)
@@ -35,10 +36,12 @@ def calculate_similarity_between_docs(doc_segmented1, doc_segmented2):
 
             # secao 4.3.3 calculo
             if plagiarism_detection_analyse(similar_sets_temp[0], similar_sets_temp[1]):
-                sw1 = show_words_from_set(set1)
-                sw2 = show_words_from_set(set2)
-                var_glob_qnt_sim += 1
-                print("Similaridade:", round(similar_sets_temp[0], 2), " entre ", sw1, " do doc1 e", sw2, "do doc2")
+
+                if (similar_sets_temp[0], set1, set2) not in var_glob_qnt_sim_vetor and (
+                        similar_sets_temp[0], set2, set1) not in var_glob_qnt_sim_vetor:
+                    sim_percent = round(similar_sets_temp[0], 2)
+                    var_glob_qnt_sim_vetor.append((sim_percent, set1, set2))
+
     return similar_sets
 
 
@@ -51,7 +54,7 @@ def show_words_from_set(set_input):
 
 def plagiarism_detection_analyse(average_ab, avegare_ba):
     # calculo secao 4.3.3
-    p = 0.78
+    p = 0.7
     if average_ab >= p:
         return True
     else:
@@ -93,7 +96,8 @@ def calculate_similarity_between_sets(set1, set2):
 
 
 def calculate_probability_plagiarism_documents(tam_doc1, tam_doc2):
-    global var_glob_qnt_sim
-    calc = (var_glob_qnt_sim / (tam_doc1 + tam_doc2)) * 100
-    calc = round(calc, 4)
-    return calc
+    global var_glob_qnt_sim_vetor
+
+    calc = (len(var_glob_qnt_sim_vetor) / (tam_doc1 * tam_doc2)) * 100
+    calc = round(calc, 2)
+    return calc, var_glob_qnt_sim_vetor
