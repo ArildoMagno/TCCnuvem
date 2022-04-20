@@ -7,16 +7,22 @@ def execute(file_name1, file_name2, n_gram):
     doc_input1 = textmanipulation.read_text(file_name1)
     doc_input2 = textmanipulation.read_text(file_name2)
 
-    # FEM
+    teste = textmanipulation.tokenization_ngram_stopwords_removal(doc_input1, n_gram)
+
+    #
+    # # FEM
     doc_tokenized_lematized_nostopwords1 = textmanipulation.tokenization_lematization_stopwordsremoval(doc_input1)
-    doc_tokenized_lematized_nostopwords2 = textmanipulation.tokenization_lematization_stopwordsremoval(doc_input2)
+
+    # doc_tokenized_lematized_nostopwords2 = textmanipulation.tokenization_lematization_stopwordsremoval(doc_input2)
     doc_segmented1 = textmanipulation.ngrams(doc_tokenized_lematized_nostopwords1, n_gram)
-    doc_segmented2 = textmanipulation.ngrams(doc_tokenized_lematized_nostopwords2, n_gram)
-    similarity.calculate_similarity_between_docs(doc_segmented1, doc_segmented2)
-    relacao_doc, similar_docs = similarity.calculate_probability_plagiarism_documents(len(doc_segmented1),
-                                                                                      len(doc_segmented2))
-    print("\nProbabilidade de Plagio entre estes Documentos:", str(relacao_doc) + "%\n\n")
-    show_words_from_set(similar_docs)
+    print("----END-----")
+
+    # doc_segmented2 = textmanipulation.ngrams(doc_tokenized_lematized_nostopwords2, n_gram)
+    # similarity.calculate_similarity_between_docs(doc_segmented1, doc_segmented2)
+    # relacao_doc, similar_docs = similarity.calculate_probability_plagiarism_documents(len(doc_segmented1),
+    #                                                                                   len(doc_segmented2))
+    # print("\nProbabilidade de Plagio entre estes Documentos:", str(relacao_doc) + "%\n\n")
+    # show_words_from_set(similar_docs)
 
 
 def show_words_from_set_inside(set):
@@ -35,7 +41,7 @@ def show_words_from_set(set_input):
 if __name__ == '__main__':
     print("\n-----------------------------------------------------------------------------"
           "\nSimilariade\n\n")
-    n_gram = 7
+    n_gram = 3
     file_name1 = "texts/text2-fonte.txt"
     file_name2 = "texts/text2-plagio.txt"
     execute(file_name1, file_name2, n_gram)
