@@ -31,7 +31,7 @@ def calculate_similarity_between_docs(doc_segmented1, doc_segmented2):
 
     for set1 in doc_segmented1:
         for set2 in doc_segmented2:
-            similar_sets_temp = calculate_similarity_between_sets(set1, set2)
+            similar_sets_temp = calculate_similarity_between_sets(set1[1], set2[1])
             similar_sets.append((similar_sets_temp, set1, set2))
 
             # secao 4.3.3 calculo
@@ -71,8 +71,7 @@ def calculate_similarity_between_sets(set1, set2):
     for word1 in set1:
         temp_similarity = []
         for word2 in set2:
-            # [1] = lemma
-            temp_similarity.append(calculate_wu_palmer_similarity(word1[1], word2[1]))
+            temp_similarity.append(calculate_wu_palmer_similarity(word1.lemma_, word2.lemma_))
 
         if not all(p == constants.SYNONYMGROUPNOTFOUND for p in temp_similarity):
             while constants.SYNONYMGROUPNOTFOUND in temp_similarity: temp_similarity.remove(
@@ -83,7 +82,7 @@ def calculate_similarity_between_sets(set1, set2):
     for word2 in set2:
         temp_similarity = []
         for word1 in set1:
-            temp_similarity.append(calculate_wu_palmer_similarity(word2[1], word1[1]))
+            temp_similarity.append(calculate_wu_palmer_similarity(word2.lemma_, word1.lemma_))
 
         if not all(p == constants.SYNONYMGROUPNOTFOUND for p in temp_similarity):
             while constants.SYNONYMGROUPNOTFOUND in temp_similarity: temp_similarity.remove(

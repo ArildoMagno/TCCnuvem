@@ -14,49 +14,38 @@ def read_text(text):
     return text
 
 
-def tokenization_lematization_stopwordsremoval(text):
-    doc = nlp(text)
-    words_pos = []
-    for token in doc:
-        if token.text not in all_stop_words and token.lemma_ not in all_stop_words \
-                and token.tag_ != "PUNCT" and token.tag_ != "SPACE" \
-                and token.lemma_ not in words_pos:
-            words_pos.append((token.text, token.lemma_))
-
-    return words_pos
-
-
-def ngrams(input_ngrams, n):
-    output = []
-    for i in range(len(input_ngrams) - n + 1):
-        output.append(input_ngrams[i:i + n])
-    print("\nPrimeiro:", output)
-    return output
-
-
-# se funcionar traduzir para inglês
 def tokenization_ngram_stopwords_removal(text, n_gram):
-    textooriginal_segmentado = []
-    n_counter = 0
+    originaltext_segmented = []
+    counter_tokens = 0
     doc = nlp(text)
     temp_original = []
-    temp_segmentado = []
+    temp_segmented = []
+    position = 0
+    position_next_start = 0
+    text_tokenized = []
 
     for token in doc:
+        text_tokenized.append(token)
+
+    while position != len(text_tokenized):
+        token = text_tokenized[position]
+        position += 1
+
         if token.tag_ != "PUNCT" and token.tag_ != "SPACE":
             temp_original.append(token)
 
         if token.text not in all_stop_words and token.lemma_ not in all_stop_words \
                 and token.tag_ != "PUNCT" and token.tag_ != "SPACE":
-            n_counter += 1
-            temp_segmentado.append(token)
+            counter_tokens += 1
+            temp_segmented.append(token)
+            if counter_tokens == 1:
+                position_next_start = position
 
-        if n_counter == n_gram:
-            textooriginal_segmentado.append((temp_original.copy(), temp_segmentado.copy()))
+        if counter_tokens == n_gram:
+            originaltext_segmented.append((temp_original.copy(), temp_segmented.copy()))
             temp_original.clear()
-            temp_segmentado.clear()
-            n_counter = 0
+            temp_segmented.clear()
+            counter_tokens = 0
+            position = position_next_start
 
-    print("\nSegundo:")
-    print(textooriginal_segmentado)
-    return textooriginal_segmentado
+    return originaltext_segmented
