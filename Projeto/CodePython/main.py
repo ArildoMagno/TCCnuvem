@@ -37,19 +37,19 @@ def show_words_from_set(set_input):
 
 if __name__ == '__main__':
     print("\nSimilariade (0~1) 0=Completamente diferentes, 1=Identicos ou Sinonimos\n\n")
-    n_gram = 5
+    n_gram = 7
     file_name1 = "texts/text2-fonte.txt"
     file_name2 = "texts/text2-plagio.txt"
     execute(file_name1, file_name2, n_gram)
 
-    file_name1 = "texts/text3-fonte.txt"
-    file_name2 = "texts/text3-plagio.txt"
-    execute(file_name1, file_name2, n_gram)
-
-    file_name1 = "texts/text4-fonte.txt"
-    file_name2 = "texts/text4-plagio.txt"
-    execute(file_name1, file_name2, n_gram)
-
-    file_name1 = "texts/text5-fonte.txt"
-    file_name2 = "texts/text5-plagio.txt"
-    execute(file_name1, file_name2, n_gram)
+    # file_name1 = "texts/text3-fonte.txt"
+    # file_name2 = "texts/text3-plagio.txt"
+    # execute(file_name1, file_name2, n_gram)
+    #
+    # file_name1 = "texts/text4-fonte.txt"
+    # file_name2 = "texts/text4-plagio.txt"
+    # execute(file_name1, file_name2, n_gram)
+    #
+    # file_name1 = "texts/text5-fonte.txt"
+    # file_name2 = "texts/text5-plagio.txt"
+    # execute(file_name1, file_name2, n_gram)
