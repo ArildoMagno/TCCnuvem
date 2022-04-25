@@ -7,7 +7,6 @@ all_stop_words = nlp.Defaults.stop_words
 var_glob_qnt_sim = 0
 
 
-# CRIAR FUNCAO PARA LER PDF/DOC
 
 def read_text(text):
     text = open(text, mode="r", encoding="utf-8").read()

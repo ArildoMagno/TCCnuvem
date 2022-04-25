@@ -9,6 +9,8 @@ import constants
 
 var_glob_qnt_sim_vetor = []
 
+var_glob_qnt_degree_resemblance_vetor = []
+
 
 def calculate_wu_palmer_similarity(word1, word2):
     synset1 = wn.synsets(word1)
@@ -25,8 +27,18 @@ def calculate_wu_palmer_similarity(word1, word2):
     return value_similarity
 
 
+def clear_global_variables():
+    global var_glob_qnt_sim_vetor
+    global var_glob_qnt_degree_resemblance_vetor
+
+    var_glob_qnt_sim_vetor = []
+    var_glob_qnt_degree_resemblance_vetor = []
+
+
 def calculate_similarity_between_docs(doc_segmented1, doc_segmented2):
     global var_glob_qnt_sim_vetor
+    global var_glob_qnt_degree_resemblance_vetor
+
     similar_sets = []
 
     for set1 in doc_segmented1:
@@ -41,6 +53,9 @@ def calculate_similarity_between_docs(doc_segmented1, doc_segmented2):
                         similar_sets_temp[0], set2, set1) not in var_glob_qnt_sim_vetor:
                     sim_percent = round(similar_sets_temp[0], 2)
                     var_glob_qnt_sim_vetor.append((sim_percent, set1, set2))
+                var_glob_qnt_degree_resemblance_vetor.append(1)
+            else:
+                var_glob_qnt_degree_resemblance_vetor.append(0)
 
     return similar_sets
 
@@ -98,5 +113,14 @@ def calculate_probability_plagiarism_documents(tam_doc1, tam_doc2):
     global var_glob_qnt_sim_vetor
 
     calc = (len(var_glob_qnt_sim_vetor) / (tam_doc1 * tam_doc2)) * 100
+    calc = round(calc, 2)
+    return calc, var_glob_qnt_sim_vetor
+
+
+def calculate_degree_resemblance(tam1, tam2):
+    global var_glob_qnt_sim_vetor
+    global var_glob_qnt_degree_resemblance_vetor
+    tam_total = (tam1 * tam2)
+    calc = sum(var_glob_qnt_degree_resemblance_vetor) / tam_total
     calc = round(calc, 2)
     return calc, var_glob_qnt_sim_vetor

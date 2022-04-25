@@ -12,10 +12,21 @@ def execute(file_name1, file_name2, n_gram):
     doc1 = textmanipulation.tokenization_ngram_stopwords_removal(doc_input1, n_gram)
     doc2 = textmanipulation.tokenization_ngram_stopwords_removal(doc_input2, n_gram)
 
+    # #  SIMILARITY 1:
     similarity.calculate_similarity_between_docs(doc1, doc2)
-    relacao_doc, similar_docs = similarity.calculate_probability_plagiarism_documents(len(doc1),
-                                                                                      len(doc2))
-    print("\nProbabilidade de Plagio entre estes Documentos:", str(relacao_doc) + "%\n")
+    relacao_doc_semelhanca, similar_docs = similarity.calculate_degree_resemblance(len(doc1), len(doc2))
+
+    print("\nResemblance doc1,doc2= ", relacao_doc_semelhanca)
+    print("\nProbabilidade de Plagio entre estes Documentos:", str(relacao_doc_semelhanca) + "%\n")
+    show_words_from_set(similar_docs)
+
+    #  SIMILARITY 2:
+    similarity.clear_global_variables()
+    similarity.calculate_similarity_between_docs(doc2, doc1)
+    relacao_doc_semelhanca, similar_docs = similarity.calculate_degree_resemblance(len(doc2), len(doc1))
+
+    print("\n\nResemblance doc2,doc1= ", relacao_doc_semelhanca)
+    print("\nProbabilidade de Plagio entre estes Documentos:", str(relacao_doc_semelhanca) + "%\n")
     show_words_from_set(similar_docs)
 
 
