@@ -3,6 +3,8 @@ import similarity
 
 
 def execute(file_name1, file_name2, n_gram):
+    # TEMPORARIAMENTE FUNCIONANDO 1:1
+
     print("\nAnalisando arquivos: ", file_name1, ", ", file_name2)
     doc_input1 = textmanipulation.read_text(file_name1)
     doc_input2 = textmanipulation.read_text(file_name2)
@@ -14,20 +16,24 @@ def execute(file_name1, file_name2, n_gram):
 
     # #  SIMILARITY 1:
     similarity.calculate_similarity_between_docs(doc1, doc2)
-    relacao_doc_semelhanca, similar_docs = similarity.calculate_degree_resemblance(len(doc1), len(doc2))
+    degree_resemblance1, similar_sets1 = similarity.calculate_degree_resemblance(len(doc1), len(doc2))
 
-    print("\nResemblance doc1,doc2= ", relacao_doc_semelhanca)
-    print("\nProbabilidade de Plagio entre estes Documentos:", str(relacao_doc_semelhanca) + "%\n")
-    show_words_from_set(similar_docs)
+    print("\nResemblance doc1,doc2= ", degree_resemblance1)
+
+    # LOG
+    # show_words_from_set(similar_sets1)
 
     #  SIMILARITY 2:
     similarity.clear_global_variables()
     similarity.calculate_similarity_between_docs(doc2, doc1)
-    relacao_doc_semelhanca, similar_docs = similarity.calculate_degree_resemblance(len(doc2), len(doc1))
+    degree_resemblance2, similar_sets2 = similarity.calculate_degree_resemblance(len(doc2), len(doc1))
 
-    print("\n\nResemblance doc2,doc1= ", relacao_doc_semelhanca)
-    print("\nProbabilidade de Plagio entre estes Documentos:", str(relacao_doc_semelhanca) + "%\n")
-    show_words_from_set(similar_docs)
+    print("\nResemblance doc2,doc1= ", degree_resemblance2)
+    # LOG
+    # show_words_from_set(similar_sets2)
+
+    print("\n\nProbabilidade de Plagio entre os dois DOCS:",
+          similarity.odds_ratio_in_percent(degree_resemblance1, degree_resemblance2), "%")
 
 
 def show_words_from_set_inside(set):

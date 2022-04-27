@@ -111,7 +111,6 @@ def calculate_similarity_between_sets(set1, set2):
 
 def calculate_probability_plagiarism_documents(tam_doc1, tam_doc2):
     global var_glob_qnt_sim_vetor
-
     calc = (len(var_glob_qnt_sim_vetor) / (tam_doc1 * tam_doc2)) * 100
     calc = round(calc, 2)
     return calc, var_glob_qnt_sim_vetor
@@ -124,3 +123,12 @@ def calculate_degree_resemblance(tam1, tam2):
     calc = sum(var_glob_qnt_degree_resemblance_vetor) / tam_total
     calc = round(calc, 2)
     return calc, var_glob_qnt_sim_vetor
+
+
+# Temporariamente 1:1
+def odds_ratio_in_percent(resemblance1, resemblance2):
+    total_resemblance = resemblance1 * resemblance2
+    odds_ratio = total_resemblance / (1 - total_resemblance)
+    odds_ratio_to_percent = odds_ratio / (1 + odds_ratio)
+
+    return odds_ratio_to_percent * 100
