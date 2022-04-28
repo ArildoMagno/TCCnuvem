@@ -1,71 +1,51 @@
-import textmanipulation_sentences as textmanipulation
-import similarity_basedhtml as similarity
+import textmanipulation
+import similarity
+import show
 
 
-def execute(file_name1, file_name2, n_gram):
-    # TEMPORARIAMENTE FUNCIONANDO 1:1
-    print("\nAnalisando arquivos: ", file_name1, ", ", file_name2)
-    doc_input1 = textmanipulation.read_text(file_name1)
-    doc_input2 = textmanipulation.read_text(file_name2)
+def analyse_docs(file_name1, file_name2):
+    print("Analisando arquivos: ", file_name1, ", ", file_name2)
+    doc1 = textmanipulation.read_text(file_name1)
+    doc2 = textmanipulation.read_text(file_name2)
 
-    # # FEM
+    # FEM
+    doc1_segmented = textmanipulation.segmentation_based_sentences(doc1)
+    doc2_segmented = textmanipulation.segmentation_based_sentences(doc2)
 
-    doc1 = textmanipulation.tokenization_ngram_stopwords_removal(doc_input1, n_gram)
-    doc2 = textmanipulation.tokenization_ngram_stopwords_removal(doc_input2, n_gram)
-
-    # #  SIMILARITY 1: (doc1 em relação ao doc2)
-    similarity.calculate_similarity_between_docs(doc1, doc2)
-    degree_resemblance1, similar_sets1 = similarity.calculate_degree_resemblance(len(doc1), len(doc2))
-
-    print("\nResemblance doc1,doc2= ", degree_resemblance1)
-
-    # LOG
-    # show_words_from_set(similar_sets1)
+    #  SIMILARITY 1: (doc1 em relação ao doc2)
+    qntd_similar_sets1, similar_sets_log1 = similarity.calculate_similar_sets_in_docs(doc1_segmented, doc2_segmented)
+    degree_resemblance1 = similarity.degree_resemblance(qntd_similar_sets1, len(doc1_segmented))
 
     #  SIMILARITY 2: (doc2 em relação ao doc1)
-    similarity.clear_global_variables()
-    similarity.calculate_similarity_between_docs(doc2, doc1)
-    degree_resemblance2, similar_sets2 = similarity.calculate_degree_resemblance(len(doc2), len(doc1))
+    qntd_similar_sets2, similar_sets_log2 = similarity.calculate_similar_sets_in_docs(doc2_segmented, doc1_segmented)
+    degree_resemblance2 = similarity.degree_resemblance(qntd_similar_sets2, len(doc2_segmented))
 
-    print("\nResemblance doc2,doc1= ", degree_resemblance2)
-    # LOG
-    # show_words_from_set(similar_sets2)
+    percent_plagiarism = similarity.odds_ratio_in_percent(degree_resemblance1, degree_resemblance2)
 
-    print("\n\nProbabilidade de Plagio entre os dois DOCS:",
-          similarity.odds_ratio_in_percent(degree_resemblance1, degree_resemblance2), "%")
-
-
-def show_words_from_set_inside(set):
-    sim = "'"
-    for i in range(1, len(set)):
-        if i != (len(set) - 1):
-            sim += set[i].text + " "
-        else:
-            sim += set[i].text + "'"
-    return sim
-
-
-def show_words_from_set(set_input):
-    for i in set_input:
-        print(str(i[0]) + " Similar", "= SentencaDoc1:", show_words_from_set_inside(i[1][0]), "| SentencaDoc2:",
-              show_words_from_set_inside(i[2][0]))
+    return (file_name1, file_name2, similar_sets_log1, similar_sets_log2, percent_plagiarism)
 
 
 if __name__ == '__main__':
-    print("\nSimilariade (0~1) 0=Completamente diferentes, 1=Identicos ou Sinonimos\n\n")
-    n_gram = 3
+    # Proximo passo: Transformar o codigo em NxN
+
+    # Ideia NxN = separar os nomes dos arquivos de maneira a rodar NxN no for
+    # e executar a função analyse_docs nos arquivos de 2 em 2, no final tenho
+    # a relação de todos para todos
+    # OBS: da para otimizar fazendo com AxB e BxA não sejam executados
+
+    result_analyses_geral = []
+
+    file_name1 = "texts/text2-fonte.txt"
+    file_name2 = "texts/text2-plagio.txt"
+    result_analyse_docs = analyse_docs(file_name1, file_name2)
+    print("Probabilidade de Plagio entre os dois DOCS:", result_analyse_docs[4], "%")
+    result_analyses_geral.append(result_analyse_docs)
+    show.show_log_from_docs(file_name1, file_name2, result_analyses_geral)
+    print("\n\n")
+
     file_name1 = "texts/text3-fonte.txt"
     file_name2 = "texts/text3-plagio.txt"
-    execute(file_name1, file_name2, n_gram)
-
-    # file_name1 = "texts/text3-fonte.txt"
-    # file_name2 = "texts/text3-plagio.txt"
-    # execute(file_name1, file_name2, n_gram)
-    #
-    # file_name1 = "texts/text4-fonte.txt"
-    # file_name2 = "texts/text4-plagio.txt"
-    # execute(file_name1, file_name2, n_gram)
-    #
-    # file_name1 = "texts/text5-fonte.txt"
-    # file_name2 = "texts/text5-plagio.txt"
-    # execute(file_name1, file_name2, n_gram)
+    result_analyse_docs = analyse_docs(file_name1, file_name2)
+    print("Probabilidade de Plagio entre os dois DOCS:", result_analyse_docs[4], "%")
+    result_analyses_geral.append(analyse_docs(file_name1, file_name2))
+    show.show_log_from_docs(file_name1, file_name2, result_analyses_geral)
