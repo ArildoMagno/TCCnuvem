@@ -10,9 +10,10 @@ import constants
 var_glob_qnt_sim_vetor = []
 
 value_similarity_sets_store = []
+var_glob_qnt_degree_resemblance_vetor = []
 
 
-def calculate_wu_palmer_similarity(word1, word2):
+def wu_palmer_similarity(word1, word2):
     synset1 = wn.synsets(word1)
     synset2 = wn.synsets(word2)
     value_similarity = 0
@@ -92,7 +93,7 @@ def calculate_similarity_between_sets(set1, set2):
     for word1 in set1:
         temp_similarity = []
         for word2 in set2:
-            temp_similarity.append(calculate_wu_palmer_similarity(word1.lemma_, word2.lemma_))
+            temp_similarity.append(wu_palmer_similarity(word1.lemma_, word2.lemma_))
 
         if not all(p == constants.SYNONYMGROUPNOTFOUND for p in temp_similarity):
             while constants.SYNONYMGROUPNOTFOUND in temp_similarity: temp_similarity.remove(
@@ -103,7 +104,7 @@ def calculate_similarity_between_sets(set1, set2):
     for word2 in set2:
         temp_similarity = []
         for word1 in set1:
-            temp_similarity.append(calculate_wu_palmer_similarity(word2.lemma_, word1.lemma_))
+            temp_similarity.append(wu_palmer_similarity(word2.lemma_, word1.lemma_))
 
         if not all(p == constants.SYNONYMGROUPNOTFOUND for p in temp_similarity):
             while constants.SYNONYMGROUPNOTFOUND in temp_similarity: temp_similarity.remove(
