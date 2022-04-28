@@ -9,7 +9,7 @@ import constants
 
 var_glob_qnt_sim_vetor = []
 
-var_glob_qnt_degree_resemblance_vetor = []
+value_similarity_sets_store = []
 
 
 def calculate_wu_palmer_similarity(word1, word2):
@@ -29,7 +29,7 @@ def calculate_wu_palmer_similarity(word1, word2):
 
 def clear_global_variables():
     global var_glob_qnt_sim_vetor
-    global var_glob_qnt_degree_resemblance_vetor
+    global value_similarity_sets_store
 
     var_glob_qnt_sim_vetor = []
     var_glob_qnt_degree_resemblance_vetor = []
@@ -37,7 +37,7 @@ def clear_global_variables():
 
 def calculate_similarity_between_docs(doc_segmented1, doc_segmented2):
     global var_glob_qnt_sim_vetor
-    global var_glob_qnt_degree_resemblance_vetor
+    global value_similarity_sets_store
 
     similar_sets = []
 
@@ -118,7 +118,7 @@ def calculate_probability_plagiarism_documents(tam_doc1, tam_doc2):
 
 def calculate_degree_resemblance(tam1, tam2):
     global var_glob_qnt_sim_vetor
-    global var_glob_qnt_degree_resemblance_vetor
+    global value_similarity_sets_store
     tam_total = (tam1 * tam2)
     calc = sum(var_glob_qnt_degree_resemblance_vetor) / tam_total
     calc = round(calc, 2)
