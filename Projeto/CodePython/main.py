@@ -1,4 +1,4 @@
-import textmanipulation_kgram as textmanipulation
+import textmanipulation_sentences as textmanipulation
 import similarity_basedhtml as similarity
 
 
@@ -58,14 +58,14 @@ if __name__ == '__main__':
     file_name2 = "texts/text2-plagio.txt"
     execute(file_name1, file_name2, n_gram)
 
-    # file_name1 = "texts/text3-fonte.txt"
-    # file_name2 = "texts/text3-plagio.txt"
-    # execute(file_name1, file_name2, n_gram)
-    #
-    # file_name1 = "texts/text4-fonte.txt"
-    # file_name2 = "texts/text4-plagio.txt"
-    # execute(file_name1, file_name2, n_gram)
-    #
-    # file_name1 = "texts/text5-fonte.txt"
-    # file_name2 = "texts/text5-plagio.txt"
-    # execute(file_name1, file_name2, n_gram)
+    file_name1 = "texts/text3-fonte.txt"
+    file_name2 = "texts/text3-plagio.txt"
+    execute(file_name1, file_name2, n_gram)
+
+    file_name1 = "texts/text4-fonte.txt"
+    file_name2 = "texts/text4-plagio.txt"
+    execute(file_name1, file_name2, n_gram)
+
+    file_name1 = "texts/text5-fonte.txt"
+    file_name2 = "texts/text5-plagio.txt"
+    execute(file_name1, file_name2, n_gram)

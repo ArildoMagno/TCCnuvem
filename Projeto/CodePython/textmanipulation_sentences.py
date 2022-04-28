@@ -20,7 +20,10 @@ def tokenization_ngram_stopwords_removal(text, n_gram):
     for sentence in doc.sents:
         sentence = remove_stop_words_puncts(sentence)
         # essa parte do ocupando espaco é onde vai o log
-        originaltext_segmented.append(("ocupandoespaco", sentence))
+        if len(sentence) > 0:
+            # Fazer ele armazenar o conteudo original para mostrar a sentença no log
+            # no lugar do ocupando espaço aqui
+            originaltext_segmented.append(("ocupandoespaco", sentence))
 
     return originaltext_segmented
 

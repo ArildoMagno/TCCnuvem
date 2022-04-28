@@ -60,13 +60,19 @@ def show_words_from_set(set_input):
 
 def sentences_similar_threshold(uAB, uBA):
     # calculo secao 4.3.3
-    p = 0.8
-    v = 0.15
-    diference = abs(uAB - uBA)
-    if min(uAB, uBA) >= p and diference <= v:
+    # no trabalho de 2015 explicam porque utilizam este threshold, só exlicar
+    p = 0.73
+    if min(uAB, uBA) >= p:
         return True
     else:
         return False
+
+    # v = 0.15
+    # diference = abs(uAB - uBA)
+    # if min(uAB, uBA) >= p and diference <= v:
+    #     return True
+    # else:
+    #     return False
 
 
 def calculate_similarity_between_sets(set1, set2):
@@ -118,6 +124,11 @@ def calculate_degree_resemblance(tam, t):
 # Temporariamente 1:1
 def odds_ratio_in_percent(resemblance1, resemblance2):
     total_resemblance = resemblance1 * resemblance2
-    odds_ratio = total_resemblance / (1 - total_resemblance)
-    odds_ratio_to_percent = odds_ratio / (1 + odds_ratio)
-    return round(odds_ratio_to_percent * 100, 2)
+    if total_resemblance != 1:
+        odds_ratio = total_resemblance / (1 - total_resemblance)
+        odds_ratio_to_percent = odds_ratio / (1 + odds_ratio)
+        result = round(odds_ratio_to_percent * 100, 2)
+    else:
+        result = 100
+
+    return round(result, 2)
