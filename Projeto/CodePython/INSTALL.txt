@@ -1,5 +1,10 @@
-Passos para instalar e rodar o projeto:
+Steps to run the project:
 
-1-
-
-
+1- Install Python3 (from python oficial website)
+2- Install spacy (pip install spacy) obs: if have error on import of library, install the Visual C++ Redistributable for Visual Studio 2015
+3- Install Package Language Portuguese (python -m spacy download pt_core_news_lg)
+4- Install wn (pip install wn)
+5- Uncomment lines #wn.download('own-pt') and #wn.add(banco-own-pt/own-pt-lmf.xml) in file similarity.py
+6- Execute main.py first time to download the content from librarys
+7- Comment again the lines uncomennted, isn't necessary download again
+8- Done.
