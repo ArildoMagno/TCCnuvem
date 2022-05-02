@@ -1,6 +1,7 @@
 import textmanipulation
 import similarity
 import show
+from os import walk
 
 
 def analyse_docs(file_name1, file_name2):
@@ -25,27 +26,23 @@ def analyse_docs(file_name1, file_name2):
     return (file_name1, file_name2, similar_sets_log1, similar_sets_log2, percent_plagiarism)
 
 
+def file_names(mypath):
+    filenames = next(walk(mypath), (None, None, []))[2]  # [] if no file
+    return filenames
+
+
 if __name__ == '__main__':
-    # Proximo passo: Transformar o codigo em NxN
-
-    # Ideia NxN = separar os nomes dos arquivos de maneira a rodar NxN no for
-    # e executar a função analyse_docs nos arquivos de 2 em 2, no final tenho
-    # a relação de todos para todos
-    # OBS: da para otimizar fazendo com AxB e BxA não sejam executados
-
+    file_names_store = file_names("texts/")
     result_analyses_geral = []
-
-    file_name1 = "texts/text2-fonte.txt"
-    file_name2 = "texts/text2-plagio.txt"
-    result_analyse_docs = analyse_docs(file_name1, file_name2)
-    print("Probabilidade de Plagio entre os dois DOCS:", result_analyse_docs[4], "%")
-    result_analyses_geral.append(result_analyse_docs)
-    show.show_log_from_docs(file_name1, file_name2, result_analyses_geral)
-    print("\n\n")
-
-    file_name1 = "texts/text3-fonte.txt"
-    file_name2 = "texts/text3-plagio.txt"
-    result_analyse_docs = analyse_docs(file_name1, file_name2)
-    print("Probabilidade de Plagio entre os dois DOCS:", result_analyse_docs[4], "%")
-    result_analyses_geral.append(analyse_docs(file_name1, file_name2))
-    show.show_log_from_docs(file_name1, file_name2, result_analyses_geral)
+    files_analysed = []
+    for i in file_names_store:
+        for j in file_names_store:
+            if i != j and ((i, j) not in files_analysed and not (j, i) in files_analysed):
+                file_name1 = "texts/" + i
+                file_name2 = "texts/" + j
+                result_analyse_docs = analyse_docs(file_name1, file_name2)
+                print("Probabilidade de Plagio entre os dois DOCS:", result_analyse_docs[4], "%")
+                result_analyses_geral.append(result_analyse_docs)
+                files_analysed.append((i, j))
+                show.show_log_from_docs(file_name1, file_name2, result_analyses_geral)
+                print("\n")

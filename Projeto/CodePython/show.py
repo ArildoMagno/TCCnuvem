@@ -4,14 +4,14 @@ def show_log_from_docs(file_name1, file_name2, result_analyses):
     found_result = found_result[0]
     logdoc12 = found_result[2]
     logdoc21 = found_result[3]
-    print("\nLog:", file_name1, ",", file_name2)
+    print("Log:", file_name1, ",", file_name2)
     show_sentences(logdoc12)
-    print("\nLog:", file_name2, ",", file_name1)
+    print("Log:", file_name2, ",", file_name1)
     show_sentences(logdoc21)
 
 def show_sentences(set_input):
     for i in set_input:
-        percent = str(i[0][0])
+        percent = str(round(i[0][0],2))
         sentence1 = show_words(i[1][0])
         sentence2 = show_words(i[2][0])
         print(percent + " Similar", "= SentencaDoc1:", sentence1, "| SentencaDoc2:", sentence2)
