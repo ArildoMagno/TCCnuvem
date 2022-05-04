@@ -46,3 +46,12 @@ if __name__ == '__main__':
                 files_analysed.append((i, j))
                 show.show_log_from_docs(file_name1, file_name2, result_analyses_geral)
                 print("\n")
+
+    # # Para testes rapidos 1:1:
+    # file_name1 = "texts/text2-fonte.txt"
+    # file_name2 = "texts/text2-plagio.txt"
+    # result_analyse_docs = analyse_docs(file_name1, file_name2)
+    # print("Probabilidade de Plagio entre os dois DOCS:", result_analyse_docs[4], "%")
+    # result_analyses_geral.append(result_analyse_docs)
+    # show.show_log_from_docs(file_name1, file_name2, result_analyses_geral)
+    # print("\n\n")
