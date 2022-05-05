@@ -1,0 +1,80 @@
+import React, {Component} from "react";
+import Button from "@material-ui/core/Button";
+import Grid from "@material-ui/core/Grid";
+import Typography from "@material-ui/core/Typography";
+import TextField from "@material-ui/core/TextField";
+import FormHelperText from "@material-ui/core/FormHelperText";
+import FormControl from "@material-ui/core/FormControl";
+import {Link} from "react-router-dom";
+import Radio from "@material-ui/core/Radio";
+import RadioGroup from "@material-ui/core/RadioGroup";
+import FormControlLabel from "@material-ui/core/FormControlLabel";
+
+export default class FilesUpload extends Component {
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            file: true,
+            result_calc: {}
+        };
+
+
+        this.calculateSimilarity = this.calculateSimilarity.bind(this);
+        this.handleChange = this.handleChange.bind(this);
+        this.handleSubmit = this.handleSubmit.bind(this);
+
+    }
+
+    handleChange(event) {
+        this.setState({file: event.target.files})
+    }
+
+    async handleSubmit(e) {
+        e.preventDefault()
+        this.calculateSimilarity();
+    }
+
+
+    calculateSimilarity() {
+        // Send Files:
+        var input = document.querySelector('input[type="file"]')
+        var data = new FormData()
+        console.log("input:", input.files)
+
+
+        for (let i = 0; i < input.files.length; i++) {
+            console.log("act file: ", input.files[i])
+            data.append('file', input.files[i])
+        }
+
+        const requestOptions = {
+            method: "POST",
+            redirect: "follow",
+            body: data,
+        }
+
+        fetch("/api/calculate-similarity", requestOptions)
+            .then(response => response.text())
+            .then((response) => {
+                console.log(response)
+            })
+            .catch(err => console.log(err))
+    }
+
+
+    render() {
+        return (
+            <div className="container">
+                <div className="row">
+                    <form onSubmit={this.handleSubmit}>
+                        <input type="file" id="file" multiple name="file" onChange={this.handleChange}/>
+                        <button type="submit" className="btn btn-info"> Calcula</button>
+                    </form>
+
+
+                </div>
+            </div>
+        );
+    }
+}

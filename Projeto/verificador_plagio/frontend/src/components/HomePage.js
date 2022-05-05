@@ -1,5 +1,5 @@
 import React, {Component} from "react";
-import FilesForm from "./FilesForm";
+import FilesUpload from "./FilesUpload";
 
 import {
     BrowserRouter as Router,
@@ -17,7 +17,7 @@ export default class HomePage extends Component {
         return (
             <Router>
                 <Switch>
-                    <Route exact path="/" component={FilesForm}/>
+                    <Route exact path="/" component={FilesUpload}/>
                 </Switch>
             </Router>
         );

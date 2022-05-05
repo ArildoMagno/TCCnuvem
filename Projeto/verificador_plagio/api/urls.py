@@ -1,7 +1,6 @@
 from django.urls import path
-from .views import MainView, SendFilesView
+from .views import CalculateSimilarity
 
 urlpatterns = [
-    path('main', MainView.as_view()),
-    path('send-files', SendFilesView.as_view()),
+    path('calculate-similarity', CalculateSimilarity.as_view()),
 ]
