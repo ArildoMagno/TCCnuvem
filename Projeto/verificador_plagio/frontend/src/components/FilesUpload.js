@@ -61,7 +61,6 @@ export default class FilesUpload extends Component {
                         <input type="file" id="file" multiple name="file" onChange={this.handleChange}/>
                         <button type="submit" className="btn btn-info"> Calcula</button>
                     </form>
-
                 </div>
             </div>
         );
