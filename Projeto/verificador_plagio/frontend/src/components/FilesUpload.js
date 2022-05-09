@@ -7,8 +7,8 @@ export default class FilesUpload extends Component {
 
         this.state = {
             file: true,
-            result_calc: {},
-            isResultPageVisible: true,
+            result_calc: Array,
+            isResultPageVisible: false,
         };
 
 
@@ -27,16 +27,19 @@ export default class FilesUpload extends Component {
         this.calculateSimilarity();
     }
 
+    showResultPage(result) {
+        this.setState({
+            isResultPageVisible: true,
+            result_calc: result
+        });
+    }
 
     calculateSimilarity() {
         // Send Files:
         var input = document.querySelector('input[type="file"]')
         var data = new FormData()
-        console.log("input:", input.files)
-
 
         for (let i = 0; i < input.files.length; i++) {
-            console.log("act file: ", input.files[i])
             data.append('file', input.files[i])
         }
 
@@ -47,9 +50,10 @@ export default class FilesUpload extends Component {
         }
 
         fetch("/api/calculate-similarity", requestOptions)
-            .then(response => response.text())
+            .then(response => response.json())
             .then((response) => {
                 console.log(response)
+                this.showResultPage(response)
             })
             .catch(err => console.log(err))
     }
@@ -67,10 +71,10 @@ export default class FilesUpload extends Component {
                 {this.state.isResultPageVisible ?
                     <Redirect to={{
                         pathname: '/result',
-                        state: {id: '123'}
+                        state: this.state.result_calc
                     }}
                     />
-                    : console.log("NAO")}
+                    : null}
             </div>
         );
     }

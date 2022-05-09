@@ -52,7 +52,9 @@ class CalculateSimilarity(APIView):
                             "similar_sets_log2": result.similar_sets_log2,
                             "percent_plagiarism": result.percent_plagiarism}
             data_final.append(resultobject)
-
+        PROXIMO BUG PARA CORRIGIR: ENVIAR AS SENTENÇAS
+        1- SÓ FAZER ENVIAR, SE PRECISA MECHER NO SERIALIZER, NELA OU ETC
+        2- DEPOIS VEJO SE REMOVO ALGUMA DELAS
         results_saida = AnalyseSerializer(data_final, many=True).data
 
         return Response(results_saida)
