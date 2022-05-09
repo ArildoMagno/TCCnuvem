@@ -1,4 +1,5 @@
 import React, {Component} from "react";
+import {Redirect} from "react-router-dom"
 
 export default class FilesUpload extends Component {
     constructor(props) {
@@ -6,7 +7,8 @@ export default class FilesUpload extends Component {
 
         this.state = {
             file: true,
-            result_calc: {}
+            result_calc: {},
+            isResultPageVisible: true,
         };
 
 
@@ -62,6 +64,13 @@ export default class FilesUpload extends Component {
                         <button type="submit" className="btn btn-info"> Calcula</button>
                     </form>
                 </div>
+                {this.state.isResultPageVisible ?
+                    <Redirect to={{
+                        pathname: '/result',
+                        state: {id: '123'}
+                    }}
+                    />
+                    : console.log("NAO")}
             </div>
         );
     }
