@@ -5,9 +5,9 @@ from django.shortcuts import render
 from rest_framework.response import Response
 from rest_framework import generics, status
 
-from .serializers import YourSerializer, AnalyseSerializer
 from .data_manipulation.similarity import Similarity
 from .data_manipulation.textdata import TextManipulation
+import json
 
 
 class CalculateSimilarity(APIView):
@@ -52,12 +52,8 @@ class CalculateSimilarity(APIView):
                             "similar_sets_log2": result.similar_sets_log2,
                             "percent_plagiarism": result.percent_plagiarism}
             data_final.append(resultobject)
-        PROXIMO BUG PARA CORRIGIR: ENVIAR AS SENTENÇAS
-        1- SÓ FAZER ENVIAR, SE PRECISA MECHER NO SERIALIZER, NELA OU ETC
-        2- DEPOIS VEJO SE REMOVO ALGUMA DELAS
-        results_saida = AnalyseSerializer(data_final, many=True).data
 
-        return Response(results_saida)
+        return Response(data_final)
 
 
 def analyse_docs(file_name1, file_name2, doc1, doc2):
@@ -86,15 +82,6 @@ def analyse_docs(file_name1, file_name2, doc1, doc2):
     analyse.percent_plagiarism = percent_plagiarism
 
     return analyse
-
-
-class Sentence:
-    percentage_doc1_doc2 = None
-    percentage_doc2_doc1 = None
-    sentence_doc1 = None
-    sentence_trated_doc1 = None
-    sentence_doc2 = None
-    sentence_trated_doc2 = None
 
 
 class FileData:

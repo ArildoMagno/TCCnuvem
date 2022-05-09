@@ -1,12 +1,10 @@
 import wn
 from wn.similarity import wup
 from .constants import SYNONYMGROUPNOTFOUND
+import json
 
 
 class Similarity:
-
-    def printamermo(self):
-        print("aaaaaaa")
 
     def wu_palmer_similarity(self, word1, word2):
         synset1 = wn.synsets(word1)
@@ -22,14 +20,6 @@ class Similarity:
             return SYNONYMGROUPNOTFOUND
         return value_similarity
 
-    class Sentence:
-        percentage_doc1_doc2 = None
-        percentage_doc2_doc1 = None
-        sentence_doc1 = None
-        sentence_trated_doc1 = None
-        sentence_doc2 = None
-        sentence_trated_doc2 = None
-
     def calculate_similar_sets_in_docs(self, doc_segmented1, doc_segmented2):
         # secao 4.3.3 calculo 2015
         qntd_similar_sets = []
@@ -43,18 +33,25 @@ class Similarity:
 
                 if self.sentences_similar_threshold(uAB, uBA):
                     qntd_similar_sets.append(1)
-
-                    sentence = self.Sentence()
-                    sentence.sentence_doc1 = set1[0]
-                    sentence.sentence_doc2 = set2[0]
-                    sentence.sentence_trated_doc1 = set1[1]
-                    sentence.sentence_trated_doc2 = set2[1]
-                    sentence.percentage_doc1_doc2 = similar_sets_temp[0]
-                    sentence.percentage_doc2_doc1 = similar_sets_temp[1]
+                    sentence = {
+                        "sentence_doc1": self.convert_token_to_str(set1[0]),
+                        "sentence_doc2": self.convert_token_to_str(set2[0]),
+                        "sentence_trated_doc1": self.convert_token_to_str(set1[1]),
+                        "sentence_trated_doc2": self.convert_token_to_str(set2[1]),
+                        "percentage_doc1_doc2": similar_sets_temp[0],
+                        "percentage_doc2_doc1": similar_sets_temp[1],
+                    }
 
                     similar_sets_log.append(sentence)
 
         return qntd_similar_sets, similar_sets_log
+
+    def convert_token_to_str(self, list_token):
+        new_str = ""
+        for token in list_token:
+            new_str += token.text + " "
+        new_str = new_str[:-1]
+        return new_str
 
     def sentences_similar_threshold(self, uAB, uBA):
         # calculo secao 4.3.3
