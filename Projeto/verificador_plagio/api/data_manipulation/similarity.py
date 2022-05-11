@@ -1,7 +1,7 @@
 import wn
+wn.config.data_directory = 'wn_data'
 from wn.similarity import wup
 from .constants import SYNONYMGROUPNOTFOUND
-import json
 
 
 class Similarity:
