@@ -1,48 +1,75 @@
 import React, {Component} from "react";
+import Grid from '@mui/material/Grid';
 
+import Container from '@mui/material/Container';
+import {createTheme, ThemeProvider} from '@mui/material/styles';
+import BarGraph from "./resultpage/BarGraph";
+import Typography from "@mui/material/Typography";
+import Button from "@mui/material/Button";
+import Stack from "@mui/material/Stack";
+
+const cards = [1, 2, 3, 4, 5, 6, 7, 8, 9];
+
+const theme = createTheme();
 
 export default class ResultPage extends Component {
     constructor(props) {
         super(props);
+
     }
 
+    helloWorld() {
+        console.log("HelloWorld")
+    }
 
     render() {
         return (
-            <div>
-                <h1>Result Page:</h1>
 
-                <div>
-                    {this.props.location.state.map((documento, index) =>
-                        <div key={index}>
-                            <b>Nome Primeiro Arquivo:</b> {documento.name_file1} <br/>
-                            <b>Nome Segundo Arquivo:</b> {documento.name_file2} <br/>
+            <Container sx={{py: 8}} maxWidth="md">
+                {/* End hero unit */}
+                <Grid container spacing={4}>
+                    {this.props.location.state.map((document, index) => (
 
-                            <h4>Sentenças:</h4>
-                            {documento.similar_sets_log1.map((documento_inside, index_documento_inside) =>
-                                <div key={index_documento_inside}>
-                                    <b> Grau de semelhança entre Sentença Doc1 com Sentença
-                                        Doc2</b>: {documento_inside.percentage_doc1_doc2} <br/>
-                                    <b>Grau de semelhança entre Sentença Doc2 com Sentença
-                                        Doc1: </b> {documento_inside.percentage_doc2_doc1} <br/>
+                        //xs (for phones) sm (for tablets) md (for small laptops)
+                        <Grid item xs={12} sm={6} md={8} lg={5} key={index} justifyContent={"center"}
+                              style={{display: "flex", flexWrap: "wrap"}}>
 
-                                    <b>Conteúdo Sentença Doc1: </b> {documento_inside.sentence_doc1} <br/>
-                                    <b>Conteúdo Sentenca Doc2: </b> {documento_inside.sentence_doc2} <br/>
-                                    <br/>
-                                    <br/>
-                                    <br/>
-                                </div>
-                            )}
+                            <Grid item>
+                                <Typography variant="h6" color="text.secondary" paragraph>
+                                    Arquivo: {document.name_file_source}
+                                </Typography>
+
+                                <BarGraph datafiles={document.relation_files}/>
+                            </Grid>
 
 
-                            <h3>Porcentagem Plagio Entre os Documentos:</h3> <h2> {documento.percent_plagiarism}</h2>
-                            <br/>
-                        </div>
-                    )}
-                </div>
+                            <Grid item xs={12} sm={12} md={12} lg={12}></Grid>
 
 
-            </div>
+                            <Button
+                                variant="contained"
+                                style={{
+                                    borderRadius: 8,
+                                    backgroundColor: "#21b6ae",
+                                    padding: "8px 22px",
+                                    fontSize: "8px",
+                                    margin: "0 auto"
+                                }}
+                                onClick={this.helloWorld}
+                            >
+
+                                Ver Detalhes
+                            </Button>
+
+
+                        </Grid>
+
+
+                    ))}
+                </Grid>
+            </Container>
+
+
         );
     }
 }
