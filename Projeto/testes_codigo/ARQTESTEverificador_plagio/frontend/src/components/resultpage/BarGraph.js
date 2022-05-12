@@ -1,64 +1,64 @@
-import React, {PureComponent} from 'react';
+import React, {Component, PureComponent} from 'react';
 import {
-  BarChart,
-  Bar,
-  XAxis,
-  YAxis,
-  CartesianGrid,
-  Tooltip,
-  Legend
+    BarChart,
+    Bar,
+    XAxis,
+    YAxis,
+    CartesianGrid,
+    Tooltip,
+    Legend
 } from "recharts";
 
-const data = [
-  {
-    name: "Page A",
-    pv: 20,
-  },
-  {
-    name: "Page B",
-    pv: 30,
-  },
-  {
-    name: "Page C",
-    pv: 10,
-  },
-  {
-    name: "Page D",
-    pv: 40,
-  },
-  {
-    name: "Page E",
-    pv: 5,
-  },
-  {
-    name: "Page F",
-    pv: 12,
-  },
-  {
-    name: "Page G",
-    pv: 92,
-  }
-];
+let data = [];
 
-export default function BarGraph() {
-  return (
-    <BarChart
-      width={500}
-      height={300}
-      data={data}
-      margin={{
-        top: 5,
-        right: 30,
-        left: 20,
-        bottom: 5
-      }}
-    >
-      <CartesianGrid strokeDasharray="3 3" />
-      <XAxis dataKey="name" />
-      <YAxis />
-      <Tooltip />
-      <Legend />
-      <Bar dataKey="pv" fill="#8884d8" />
-    </BarChart>
-  );
+export default class BarGraph extends Component {
+
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            datafiles: props.datafiles,
+        };
+        this.manipulate_infos_graph = this.manipulate_infos_graph.bind(this);
+    }
+
+    manipulate_infos_graph() {
+        data = []
+        let file_infos = this.state.datafiles
+        for (let i = 0; i < file_infos.length; i++) {
+            let file_data =
+                {
+                    name: file_infos[i].name_file_dest,
+                    porcentagem: file_infos[i].percent,
+                }
+            data.push(file_data)
+        }
+    }
+
+
+    render() {
+
+        this.manipulate_infos_graph()
+
+        return (
+            <BarChart
+                width={300}
+                height={300}
+                data={data}
+                margin={{
+                    top: 5,
+                    right: 30,
+                    left: 20,
+                    bottom: 5
+                }}
+            >
+                <CartesianGrid strokeDasharray="3 3"/>
+                <XAxis dataKey="name"/>
+                <YAxis type="number" domain={[0, 100]}/>
+                <Tooltip/>
+                <Legend/>
+                <Bar dataKey="porcentagem" fill="#21b6ae"/>
+            </BarChart>
+        );
+    }
 }
