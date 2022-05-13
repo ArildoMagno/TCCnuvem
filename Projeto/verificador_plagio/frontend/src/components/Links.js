@@ -2,7 +2,7 @@ import React, {Component} from "react";
 import FilesUpload from "./FilesUpload";
 import ResultPage from "./ResultPage";
 import HomePage from "./HomePage";
-import ResultPageGrafico from "./resultpage/BarGraph";
+import DetailsResult from "./resultpage/DetailsResult";
 
 import {
     BrowserRouter as Router,
@@ -23,7 +23,7 @@ export default class Links extends Component {
                     <Route exact path="/" component={FilesUpload}/>
                     <Route path="/result" component={ResultPage}/>
                     <Route path="/homepage" component={HomePage}/>
-                    <Route path="/grafico" component={ResultPageGrafico}/>
+                    <Route path="/details" component={DetailsResult}/>
                 </Switch>
             </Router>
         );

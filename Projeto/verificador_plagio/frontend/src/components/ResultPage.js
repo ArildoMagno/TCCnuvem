@@ -2,25 +2,36 @@ import React, {Component} from "react";
 import Grid from '@mui/material/Grid';
 
 import Container from '@mui/material/Container';
-import {createTheme, ThemeProvider} from '@mui/material/styles';
+import {createTheme} from '@mui/material/styles';
 import BarGraph from "./resultpage/BarGraph";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
-import Stack from "@mui/material/Stack";
+import {Redirect} from "react-router-dom";
+import DetailsResult from "./resultpage/DetailsResult";
 
-const cards = [1, 2, 3, 4, 5, 6, 7, 8, 9];
-
-const theme = createTheme();
+createTheme();
 
 export default class ResultPage extends Component {
     constructor(props) {
         super(props);
 
+
+        this.state = {
+            result_sentences: Array,
+            isDetailsPageVisible: false,
+        };
+        this._onButtonClick = this._onButtonClick.bind(this);
+
     }
 
-    helloWorld() {
-        console.log("HelloWorld")
+
+    _onButtonClick(result) {
+        this.setState({
+            result_sentences: result,
+            isDetailsPageVisible: true,
+        });
     }
+
 
     render() {
         return (
@@ -55,7 +66,7 @@ export default class ResultPage extends Component {
                                     fontSize: "8px",
                                     margin: "0 auto"
                                 }}
-                                onClick={this.helloWorld}
+                                onClick={() => this._onButtonClick(document.relation_files)}
                             >
 
                                 Ver Detalhes
@@ -67,8 +78,18 @@ export default class ResultPage extends Component {
 
                     ))}
                 </Grid>
-            </Container>
 
+                {this.state.isDetailsPageVisible ?
+                    <Redirect to={{
+                        pathname: '/details',
+                        state: this.state.result_sentences
+                    }}
+                    />
+                    : null}
+                }
+
+
+            </Container>
 
         );
     }
