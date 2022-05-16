@@ -18,6 +18,7 @@ export default class ResultPage extends Component {
 
         this.state = {
             result_sentences: Array,
+            document_name: "",
             isDetailsPageVisible: false,
         };
         this._onButtonClick = this._onButtonClick.bind(this);
@@ -25,9 +26,10 @@ export default class ResultPage extends Component {
     }
 
 
-    _onButtonClick(result) {
+    _onButtonClick(result, name) {
         this.setState({
             result_sentences: result,
+            document_name: name,
             isDetailsPageVisible: true,
         });
     }
@@ -66,7 +68,7 @@ export default class ResultPage extends Component {
                                     fontSize: "8px",
                                     margin: "0 auto"
                                 }}
-                                onClick={() => this._onButtonClick(document.relation_files)}
+                                onClick={() => this._onButtonClick(document.relation_files, document.name_file_source)}
                             >
 
                                 Ver Detalhes
@@ -82,7 +84,10 @@ export default class ResultPage extends Component {
                 {this.state.isDetailsPageVisible ?
                     <Redirect to={{
                         pathname: '/details',
-                        state: this.state.result_sentences
+                        state: {
+                            sentences: this.state.result_sentences,
+                            document_name: this.state.document_name
+                        }
                     }}
                     />
                     : null}
