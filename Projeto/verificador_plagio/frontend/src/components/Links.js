@@ -1,5 +1,4 @@
 import React, {Component} from "react";
-import FilesUpload from "./FilesUpload";
 import ResultPage from "./ResultPage";
 import HomePage from "./HomePage";
 import DetailsResult from "./resultpage/DetailsResult";
@@ -20,9 +19,8 @@ export default class Links extends Component {
         return (
             <Router>
                 <Switch>
-                    <Route exact path="/" component={FilesUpload}/>
+                    <Route exact path="/" component={HomePage}/>
                     <Route path="/result" component={ResultPage}/>
-                    <Route path="/homepage" component={HomePage}/>
                     <Route path="/details" component={DetailsResult}/>
                 </Switch>
             </Router>

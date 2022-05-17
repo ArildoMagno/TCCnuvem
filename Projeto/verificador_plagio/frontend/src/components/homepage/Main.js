@@ -4,17 +4,83 @@ import Container from "@mui/material/Container";
 import Typography from "@mui/material/Typography";
 import Stack from "@mui/material/Stack";
 import Button from "@mui/material/Button";
-import SendIcon from '@mui/icons-material/Send';
-
-const cards = [1, 2, 3, 4, 5, 6, 7, 8, 9];
+import {Redirect} from "react-router-dom";
+import LoadingSpin from "react-loading-spin";
 
 export default class Main extends Component {
     constructor(props) {
         super(props);
+
+
+        this.state = {
+            file: true,
+            result_calc: Array,
+            isResultPageVisible: false,
+            fileUploadState: "",
+            loading: false
+        };
+
+        this.calculateSimilarity = this.calculateSimilarity.bind(this);
+        this.handleSubmit = this.handleSubmit.bind(this);
+        this.inputReference = React.createRef();
+
     }
 
+    fileUploadAction = () => {
+        this.inputReference.current.click();
+
+
+    }
+    fileUploadInputChange = (e) => {
+        this.setState({fileUploadState: e.target.files, loading: true}, () => {
+            this.handleSubmit(e)
+        });
+    }
+
+    async handleSubmit(event) {
+        event.preventDefault()
+        this.calculateSimilarity();
+    }
+
+    showResultPage(result) {
+        this.setState({
+            isResultPageVisible: true,
+            result_calc: result
+        });
+    }
+
+    calculateSimilarity() {
+        var data = new FormData()
+        for (let i = 0; i < this.state.fileUploadState.length; i++) {
+            console.log("FileUploadState posi", i, "con:", this.state.fileUploadState[i])
+            data.append('file', this.state.fileUploadState[i])
+        }
+
+        const requestOptions = {
+            method: "POST",
+            redirect: "follow",
+            body: data,
+        }
+
+        fetch("/api/calculate-similarity", requestOptions)
+            .then(response => response.json())
+            .then((response) => {
+                this.setState({
+                    loading: false,
+                });
+                this.showResultPage(response)
+            })
+            .catch(err => {
+                console.log(err)
+                this.setState({
+                    loading: false,
+                });
+            })
+    }
 
     render() {
+
+
         return (
 
             <main>
@@ -53,24 +119,45 @@ export default class Main extends Component {
                             spacing={1}
                             justifyContent="center"
                         >
-                            <Button
-                                variant="contained"
-                                style={{
-                                    borderRadius: 35,
-                                    backgroundColor: "#21b6ae",
-                                    padding: "18px 36px",
-                                    fontSize: "18px"
-                                }}
-                            >
 
-                                Enviar Arquivos
-                            </Button>
+
+                            <input
+                                type="file"
+                                id="file"
+                                name="file"
+                                multiple
+                                hidden
+                                ref={this.inputReference}
+                                onChange={this.fileUploadInputChange}/>
+
+                            {this.state.loading ? <LoadingSpin primaryColor="#92A8D1"/>
+                                :
+                                <Button
+                                    onClick={this.fileUploadAction}
+                                    variant="contained"
+                                    style={{
+                                        borderRadius: 35,
+                                        backgroundColor: "#92A8D1",
+                                        padding: "18px 36px",
+                                        fontSize: "18px"
+                                    }}
+                                > Enviar Arquivos </Button>
+                            }
 
                         </Stack>
 
 
                     </Container>
                 </Box>
+
+
+                {this.state.isResultPageVisible ?
+                    <Redirect to={{
+                        pathname: '/result',
+                        state: this.state.result_calc
+                    }}
+                    />
+                    : null}
 
 
             </main>

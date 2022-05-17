@@ -57,7 +57,7 @@ export default class BarGraph extends Component {
                 <YAxis type="number" domain={[0, 100]}/>
                 <Tooltip/>
                 <Legend/>
-                <Bar dataKey="porcentagem" fill="#21b6ae"/>
+                <Bar dataKey="porcentagem" fill="#92A8D1"/>
             </BarChart>
         );
     }
