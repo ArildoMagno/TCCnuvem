@@ -152,7 +152,7 @@ export default class Main extends Component {
 
 
                 {this.state.isResultPageVisible ?
-                    <Redirect to={{
+                    <Redirect push to={{
                         pathname: '/result',
                         state: this.state.result_calc
                     }}

@@ -20,6 +20,8 @@ export default class BarGraph extends Component {
             datafiles: props.datafiles,
         };
         this.manipulate_infos_graph = this.manipulate_infos_graph.bind(this);
+        console.log("DATAFILES:", this.state.datafiles)
+        console.log("DATA:", data)
     }
 
     manipulate_infos_graph() {
@@ -42,12 +44,12 @@ export default class BarGraph extends Component {
 
         return (
             <BarChart
-                width={300}
-                height={300}
+                width={400}
+                height={400}
                 data={data}
                 margin={{
                     top: 5,
-                    right: 30,
+                    right: 40,
                     left: 20,
                     bottom: 5
                 }}

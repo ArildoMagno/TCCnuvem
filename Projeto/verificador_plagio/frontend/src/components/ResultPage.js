@@ -88,7 +88,7 @@ export default class ResultPage extends Component {
                     </Grid>
 
                     {this.state.isDetailsPageVisible ?
-                        <Redirect to={{
+                        <Redirect push to={{
                             pathname: '/details',
                             state: {
                                 sentences: this.state.result_sentences,

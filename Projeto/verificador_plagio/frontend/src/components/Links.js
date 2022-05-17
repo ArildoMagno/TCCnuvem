@@ -2,9 +2,11 @@ import React, {Component} from "react";
 import ResultPage from "./ResultPage";
 import HomePage from "./HomePage";
 import DetailsResult from "./resultpage/DetailsResult";
+import history from "./history_locale";
+
 
 import {
-    BrowserRouter as Router,
+    Router,
     Switch,
     Route,
 } from "react-router-dom";
@@ -17,7 +19,7 @@ export default class Links extends Component {
 
     render() {
         return (
-            <Router>
+            <Router history={history}>
                 <Switch>
                     <Route exact path="/" component={HomePage}/>
                     <Route path="/result" component={ResultPage}/>
