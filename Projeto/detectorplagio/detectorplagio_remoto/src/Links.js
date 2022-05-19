@@ -1,9 +1,9 @@
 import React, {Component} from "react";
-import ResultPage from "./ResultPage";
-import HomePage from "./HomePage";
-import DetailsResult from "./resultpage/DetailsResult";
+import ResultPage from "./components/ResultPage";
+import HomePage from "./components/HomePage";
+import DetailsResult from "./components/resultpage/DetailsResult";
 import history from "./history_locale";
-
+import TestePage from "./components/TestePage";
 
 import {
     Router,
@@ -12,16 +12,12 @@ import {
 } from "react-router-dom";
 
 export default class Links extends Component {
-    constructor(props) {
-        super(props);
-    }
-
-
     render() {
         return (
             <Router history={history}>
                 <Switch>
                     <Route exact path="/" component={HomePage}/>
+                    <Route exact path="/teste" component={TestePage}/>
                     <Route path="/result" component={ResultPage}/>
                     <Route path="/details" component={DetailsResult}/>
                 </Switch>

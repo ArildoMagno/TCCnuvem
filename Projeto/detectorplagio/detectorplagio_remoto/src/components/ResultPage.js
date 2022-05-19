@@ -7,7 +7,6 @@ import BarGraph from "./resultpage/BarGraph";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import {Redirect} from "react-router-dom";
-import DetailsResult from "./resultpage/DetailsResult";
 import CssBaseline from "@mui/material/CssBaseline";
 import AppBarPageBackButton from "./homepage/AppBarPageBackButton";
 

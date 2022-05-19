@@ -83,8 +83,7 @@ TEMPLATES = [
 WSGI_APPLICATION = 'detectorplagio_remoto.wsgi.application'
 
 
-DATABASES = {
-}
+DATABASES = {}
 CORS_ORIGIN_ALLOW_ALL = True
 
 STATIC_URL = '/static/'

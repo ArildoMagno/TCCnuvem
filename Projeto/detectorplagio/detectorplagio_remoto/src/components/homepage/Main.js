@@ -4,7 +4,7 @@ import Container from "@mui/material/Container";
 import Typography from "@mui/material/Typography";
 import Stack from "@mui/material/Stack";
 import Button from "@mui/material/Button";
-import {Redirect} from "react-router-dom";
+import {Redirect} from 'react-router-dom';
 import LoadingSpin from "react-loading-spin";
 
 export default class Main extends Component {
@@ -16,6 +16,7 @@ export default class Main extends Component {
             file: true,
             result_calc: Array,
             isResultPageVisible: false,
+            isTesteVisible: false,
             fileUploadState: "",
             loading: false
         };
@@ -28,9 +29,14 @@ export default class Main extends Component {
 
     fileUploadAction = () => {
         this.inputReference.current.click();
-
-
     }
+
+    redirect = () => {
+        this.setState({
+            isTesteVisible: true,
+        });
+    }
+
     fileUploadInputChange = (e) => {
         this.setState({fileUploadState: e.target.files, loading: true}, () => {
             this.handleSubmit(e)
@@ -61,8 +67,8 @@ export default class Main extends Component {
             redirect: "follow",
             body: data,
         }
-
-        fetch("/api/calculate-similarity", requestOptions)
+        // CALL LOCAL
+        fetch("http://127.0.0.1:8000/api/calculate-similarity", requestOptions)
             .then(response => response.json())
             .then((response) => {
                 this.setState({
@@ -144,6 +150,19 @@ export default class Main extends Component {
                                 > Enviar Arquivos </Button>
                             }
 
+
+                            <Button
+                                onClick={this.redirect}
+                                variant="contained"
+                                style={{
+                                    borderRadius: 35,
+                                    backgroundColor: "#92A8D1",
+                                    padding: "18px 36px",
+                                    fontSize: "18px"
+                                }}
+                            > REDIRECT </Button>
+
+
                         </Stack>
 
 
@@ -152,12 +171,21 @@ export default class Main extends Component {
 
 
                 {this.state.isResultPageVisible ?
-                    <Redirect push to={{
-                        pathname: '/result',
+
+                    <Redirect to={{
+                        pathname: '/teste',
                         state: this.state.result_calc
                     }}
                     />
                     : null}
+
+                {this.state.isTesteVisible ?
+
+                    <Redirect push to={{
+                        pathname: '/teste',
+                    }}
+                    />
+                    : console.log("NAO REDIRECIONOU")}
 
 
             </main>
