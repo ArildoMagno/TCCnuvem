@@ -16,7 +16,6 @@ export default class Main extends Component {
             file: true,
             result_calc: Array,
             isResultPageVisible: false,
-            isTesteVisible: false,
             fileUploadState: "",
             loading: false
         };
@@ -29,12 +28,6 @@ export default class Main extends Component {
 
     fileUploadAction = () => {
         this.inputReference.current.click();
-    }
-
-    redirect = () => {
-        this.setState({
-            isTesteVisible: true,
-        });
     }
 
     fileUploadInputChange = (e) => {
@@ -151,18 +144,6 @@ export default class Main extends Component {
                             }
 
 
-                            <Button
-                                onClick={this.redirect}
-                                variant="contained"
-                                style={{
-                                    borderRadius: 35,
-                                    backgroundColor: "#92A8D1",
-                                    padding: "18px 36px",
-                                    fontSize: "18px"
-                                }}
-                            > REDIRECT </Button>
-
-
                         </Stack>
 
 
@@ -173,20 +154,11 @@ export default class Main extends Component {
                 {this.state.isResultPageVisible ?
 
                     <Redirect to={{
-                        pathname: '/teste',
+                        pathname: '/result',
                         state: this.state.result_calc
                     }}
                     />
                     : null}
-
-                {this.state.isTesteVisible ?
-
-                    <Redirect push to={{
-                        pathname: '/teste',
-                    }}
-                    />
-                    : console.log("NAO REDIRECIONOU")}
-
 
             </main>
 

@@ -28,9 +28,8 @@ export default class Main extends Component {
 
     fileUploadAction = () => {
         this.inputReference.current.click();
-
-
     }
+
     fileUploadInputChange = (e) => {
         this.setState({fileUploadState: e.target.files, loading: true}, () => {
             this.handleSubmit(e)

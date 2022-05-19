@@ -13,7 +13,6 @@ const AppBarPageBackButton = () => {
 
     return (
         <div>
-
             <AppBar position="relative" style={{background: '#92A8D1'}}>
                 <Toolbar>
                     <IconButton onClick={() => history.goBack()}>
