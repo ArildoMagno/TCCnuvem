@@ -20,8 +20,6 @@ export default class BarGraph extends Component {
             datafiles: props.datafiles,
         };
         this.manipulate_infos_graph = this.manipulate_infos_graph.bind(this);
-        console.log("DATAFILES:", this.state.datafiles)
-        console.log("DATA:", data)
     }
 
     manipulate_infos_graph() {

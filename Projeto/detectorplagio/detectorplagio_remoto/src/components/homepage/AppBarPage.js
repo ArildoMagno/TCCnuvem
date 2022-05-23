@@ -1,4 +1,4 @@
-import React, {Component} from "react";
+import React from "react";
 import Toolbar from "@mui/material/Toolbar";
 import AppBar from '@mui/material/AppBar';
 

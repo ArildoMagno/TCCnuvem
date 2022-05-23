@@ -1,14 +1,11 @@
 import spacy
 
 spacy.prefer_gpu()
-nlp = spacy.load("pt_core_news_lg")
+nlp = spacy.load("pt_core_news_sm")
 all_stop_words = nlp.Defaults.stop_words
 
 
 class TextManipulation:
-
-    def printamermo(self):
-        print("aaaaaaa")
 
     # Caso for salvar os arquivos e ler eles, basta passar o path deles para essa função
     def read_text(self, text):

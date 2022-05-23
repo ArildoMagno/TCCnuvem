@@ -1,13 +1,11 @@
-import React, {Component} from "react";
+import React from "react";
 import Toolbar from "@mui/material/Toolbar";
 import AppBar from '@mui/material/AppBar';
-import {useHistory} from "react-router-dom";
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import IconButton from "@material-ui/core/IconButton";
-
+import {useHistory} from "react-router-dom";
 
 const AppBarPageBackButton = () => {
-
 
     const history = useHistory();
 

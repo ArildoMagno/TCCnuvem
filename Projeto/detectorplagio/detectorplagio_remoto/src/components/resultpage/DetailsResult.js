@@ -8,7 +8,6 @@ import Grid from '@mui/material/Grid';
 export default class DetailsResult extends Component {
     constructor(props) {
         super(props);
-        console.log("ENTRADA:", this.props.location.state)
     }
 
 

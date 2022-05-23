@@ -51,7 +51,6 @@ export default class Main extends Component {
     calculateSimilarity() {
         var data = new FormData()
         for (let i = 0; i < this.state.fileUploadState.length; i++) {
-            console.log("FileUploadState posi", i, "con:", this.state.fileUploadState[i])
             data.append('file', this.state.fileUploadState[i])
         }
 
@@ -60,8 +59,12 @@ export default class Main extends Component {
             redirect: "follow",
             body: data,
         }
-        // CALL LOCAL
-        fetch("http://127.0.0.1:8000/api/calculate-similarity", requestOptions)
+
+        // Local:
+        // var location = "http://127.0.0.1:8000/api/calculate-similarity"
+        // Remoto:
+        var location = "/api/calculate-similarity"
+        fetch(location, requestOptions)
             .then(response => response.json())
             .then((response) => {
                 this.setState({
@@ -69,8 +72,8 @@ export default class Main extends Component {
                 });
                 this.showResultPage(response)
             })
-            .catch(err => {
-                console.log(err)
+            .catch(error => {
+                console.log(error)
                 this.setState({
                     loading: false,
                 });
@@ -99,7 +102,7 @@ export default class Main extends Component {
                             color="text.primary"
                             gutterBottom
                         >
-                            Verificador de Plágio
+                            Detector de Plágio
                         </Typography>
 
 
@@ -153,7 +156,7 @@ export default class Main extends Component {
 
                 {this.state.isResultPageVisible ?
 
-                    <Redirect to={{
+                    <Redirect push to={{
                         pathname: '/result',
                         state: this.state.result_calc
                     }}
