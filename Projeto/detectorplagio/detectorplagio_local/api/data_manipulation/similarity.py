@@ -1,4 +1,5 @@
 import wn
+
 wn.config.data_directory = 'wn_data'
 from wn.similarity import wup
 from .constants import SYNONYMGROUPNOTFOUND
@@ -10,6 +11,9 @@ class Similarity:
         synset1 = wn.synsets(word1)
         synset2 = wn.synsets(word2)
         value_similarity = 0
+
+        if word1 == word2:
+            return 1
 
         if len(synset1) > 0 and len(synset2) > 0:
             synset1 = synset1[0]
@@ -69,6 +73,7 @@ class Similarity:
         # anB: a1Bn, a2Bn, a3Bn
         # relacao de cada elemento de A com todos os elementos do conjunto B
         for word1 in set1:
+
             temp_similarity = []
             for word2 in set2:
                 temp_similarity.append(self.wu_palmer_similarity(word1.lemma_, word2.lemma_))

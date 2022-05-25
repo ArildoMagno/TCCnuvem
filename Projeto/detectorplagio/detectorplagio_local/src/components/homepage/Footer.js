@@ -7,8 +7,6 @@ export default class Footer extends Component {
 
     render() {
         return (
-
-
             <Box sx={{bgcolor: 'background.paper', p: 10}} component="footer">
 
                 <Typography

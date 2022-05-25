@@ -4,9 +4,7 @@ import AppBar from '@mui/material/AppBar';
 
 
 
-
 const AppBarPage = () => {
-
     return (
         <div>
 
