@@ -11,6 +11,26 @@ import {
 
 let data = [];
 
+
+function calculate_font_graph_size() {
+    let font_size = 0
+
+    if (data.length < 3) {
+        font_size = 16
+    }
+
+    if (data.length > 10 && data.length < 20) {
+        font_size = 12
+    }
+
+    if (data.length > 20) {
+        font_size = 9
+    }
+
+    return font_size
+}
+
+
 export default class BarGraph extends Component {
 
     constructor(props) {
@@ -35,6 +55,23 @@ export default class BarGraph extends Component {
         }
     }
 
+    calculate_graph_size() {
+        let size = 0
+
+        if (data.length < 3) {
+            size = 400
+        }
+
+        if (data.length > 10 && data.length < 20) {
+            size = 700
+        }
+
+        if (data.length > 20) {
+            size = 1100
+        }
+
+        return size
+    }
 
     render() {
 
@@ -42,7 +79,7 @@ export default class BarGraph extends Component {
 
         return (
             <BarChart
-                width={400}
+                width={this.calculate_graph_size()}
                 height={400}
                 data={data}
                 margin={{
@@ -53,7 +90,10 @@ export default class BarGraph extends Component {
                 }}
             >
                 <CartesianGrid strokeDasharray="3 3"/>
-                <XAxis dataKey="name"/>
+                <XAxis
+                    dataKey="name"
+                    tick={{fontSize: calculate_font_graph_size()}}
+                />
                 <YAxis type="number" domain={[0, 100]}/>
                 <Tooltip/>
                 <Legend/>
