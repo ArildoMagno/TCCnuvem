@@ -90,6 +90,10 @@ def analyse_docs(file_name1, file_name2, doc1, doc2):
     doc1_segmented = text_manipulation.segmentation_based_sentences(doc1)
     doc2_segmented = text_manipulation.segmentation_based_sentences(doc2)
 
+    # PARA DEBUGAR
+    if file_name1 == 'example2.txt' and file_name2 == 'example3.txt':
+        print("DEBUG AQUI")
+
     # #  SIMILARITY 1: (doc1 em relação ao doc2) SÓ REPLICAR O METODO AQUI:
     qntd_similar_sets1, similar_sets_log1 = similarity.calculate_similar_sets_in_docs(doc1_segmented, doc2_segmented)
     degree_resemblance1 = similarity.degree_resemblance(qntd_similar_sets1, len(doc1_segmented))
@@ -180,7 +184,7 @@ def generate_pdf(data):
         lenstring = ceil((len(text) / 80))
         y = y - ((size * lenstring) * 2.5)
 
-        # CONTEUDO
+        # CONTEUDO (X EM RELACAO A Y)
         for file_rel in relation_files:
             name_of_document_dest = file_rel.get('name_file_dest')
             name_of_document_dest = name_of_document_dest.split('.', 1)[0]
@@ -190,10 +194,10 @@ def generate_pdf(data):
             canvas.setFont("Helvetica", 15)
             textobject = canvas.beginText(40, y)
             text = 'Documento ' + name_of_document_source + " em relação ao Documento " + name_of_document_dest + ": "
-            wraped_text = "\n".join(wrap(text, 60))
+            wraped_text = "\n".join(wrap(text, 80))
             textobject.textLines(wraped_text)
             canvas.drawText(textobject)
-            lenstring = ceil((len(text) / 60))
+            lenstring = ceil((len(text) / 80))
             y = y - ((size * lenstring) * 1.5)
 
             canvas.setFont("Helvetica", 13)
@@ -210,9 +214,9 @@ def generate_pdf(data):
 
                 # Calcula se vai caber toda a sentenca na pagina, caso nao caiba, nova pagina
                 calc_axisy = y - ((size * 2.5) + (size * 1.5) + ((size * lenstring) * 1.5))
-                if (calc_axisy <= 0):
+                if (calc_axisy <= 30):
                     canvas.showPage()
-                    y = 780
+                    y = 770
 
                 canvas.setFont("Helvetica", size)
                 y = y - (size * 2.5)
@@ -237,6 +241,8 @@ def generate_pdf(data):
 
             # troca pagina
             canvas.showPage()
+            y = 750
+            size = 16
 
         # salva documento
         canvas.save()

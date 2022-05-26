@@ -30,25 +30,49 @@ class Similarity:
         similar_sets_log = []
 
         for set1 in doc_segmented1:
+            found_similar_set = False
+            sentence = {}
             for set2 in doc_segmented2:
-                similar_sets_temp = self.similarity_between_sets(set1[1], set2[1])
-                uAB = similar_sets_temp[0]
-                uBA = similar_sets_temp[1]
 
-                if self.sentences_similar_threshold(uAB, uBA):
-                    qntd_similar_sets.append(1)
-                    sentence = {
-                        "sentence_doc1": self.convert_token_to_str(set1[0]),
-                        "sentence_doc2": self.convert_token_to_str(set2[0]),
-                        "sentence_trated_doc1": self.convert_token_to_str(set1[1]),
-                        "sentence_trated_doc2": self.convert_token_to_str(set2[1]),
-                        "percentage_doc1_doc2": similar_sets_temp[0],
-                        "percentage_doc2_doc1": similar_sets_temp[1],
-                    }
+                verify_set = self.verify_set_in_sentencelist(similar_sets_log, self.convert_token_to_str(set1[1]),
+                                                             self.convert_token_to_str(set2[1]))
+                # Se a analise da sentença nao ta na lista, avalia
+                if verify_set == None:
+                    similar_sets_temp = self.similarity_between_sets(set1[1], set2[1])
+                    uAB = similar_sets_temp[0]
+                    uBA = similar_sets_temp[1]
+                    # Se forem o suficiente similar
+                    if self.sentences_similar_threshold(uAB, uBA):
+                        sentence = {
+                            "sentence_doc1": self.convert_token_to_str(set1[0]),
+                            "sentence_doc2": self.convert_token_to_str(set2[0]),
+                            "sentence_trated_doc1": self.convert_token_to_str(set1[1]),
+                            "sentence_trated_doc2": self.convert_token_to_str(set2[1]),
+                            "percentage_doc1_doc2": similar_sets_temp[0],
+                            "percentage_doc2_doc1": similar_sets_temp[1],
+                        }
+                        found_similar_set = True
+                        # similar_sets_log.append(sentence)
+                else:
+                    sentence = verify_set
+                    found_similar_set = True
 
-                    similar_sets_log.append(sentence)
+            if found_similar_set:
+                qntd_similar_sets.append(1)
+                similar_sets_log.append(sentence)
 
         return qntd_similar_sets, similar_sets_log
+
+    def verify_set_in_sentencelist(self, list, sentence_trated1, sentence_trated2):
+        if len(list) == 0:
+            return None
+
+        for element in list:
+            sentence_trated_doc1 = element.get('sentence_trated_doc1')
+            sentence_trated_doc2 = element.get('sentence_trated_doc2')
+            if sentence_trated_doc1 == sentence_trated1 and sentence_trated_doc2 == sentence_trated2:
+                return element
+        return None
 
     def convert_token_to_str(self, list_token):
         new_str = ""

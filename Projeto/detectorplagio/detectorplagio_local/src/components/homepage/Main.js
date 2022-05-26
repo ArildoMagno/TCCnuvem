@@ -6,6 +6,7 @@ import Stack from "@mui/material/Stack";
 import Button from "@mui/material/Button";
 import {Redirect} from 'react-router-dom';
 import LoadingSpin from "react-loading-spin";
+import {Alert} from "@mui/material";
 
 export default class Main extends Component {
     constructor(props) {
@@ -17,7 +18,8 @@ export default class Main extends Component {
             result_calc: Array,
             isResultPageVisible: false,
             fileUploadState: "",
-            loading: false
+            loading: false,
+            errorMessage: false,
         };
 
         this.calculateSimilarity = this.calculateSimilarity.bind(this);
@@ -31,7 +33,12 @@ export default class Main extends Component {
     }
 
     fileUploadInputChange = (e) => {
-        this.setState({fileUploadState: e.target.files, loading: true}, () => {
+        if (e.target.files.length <= 1) {
+            this.setState({errorMessage: true});
+            return
+        }
+
+        this.setState({fileUploadState: e.target.files, errorMessage: false, loading: true}, () => {
             this.handleSubmit(e)
         });
     }
@@ -115,6 +122,8 @@ export default class Main extends Component {
                             Envie os arquivos que deseja analisar.
                         </Typography>
 
+                        {this.state.errorMessage && <Alert severity="error">Envie mais de um arquivo!</Alert>}
+
                         <Stack
                             sx={{pt: 4}}
                             direction="row"
@@ -155,7 +164,6 @@ export default class Main extends Component {
 
 
                 {this.state.isResultPageVisible ?
-
                     <Redirect push to={{
                         pathname: '/result',
                         state: this.state.result_calc
