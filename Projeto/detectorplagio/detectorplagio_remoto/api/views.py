@@ -27,11 +27,9 @@ class CalculateSimilarity(APIView):
             file_data = FileData()
             text = ''
             name = file.name
-
             for line in file:
                 text += line.decode() + ' '
             text = text[:-1]
-
             file_data.name_file = name
             file_data.text = text
             files_data_store.append(file_data)
@@ -41,10 +39,16 @@ class CalculateSimilarity(APIView):
         for file1 in files_data_store:
             for file2 in files_data_store:
                 if file1.name_file != file2.name_file:
-                    result = analyse_docs(file1.name_file, file2.name_file, file1.text, file2.text)
-                    result_analyse.append(result)
+                    # Verifica se os documentos ainda não foram analisados pois (doc1,doc2) == (doc2,doc1)
+                    files_already_analysed = files_already_analyzed(result_analyse, file1.name_file, file2.name_file)
+                    # Caso não tiverem analisa, e caso já, apenas busca o resultado
+                    if files_already_analysed == None:
+                        result = analyse_docs(file1.name_file, file2.name_file, file1.text, file2.text)
+                        result_analyse.append(result)
+                    else:
+                        result_analyse.append(files_already_analysed)
 
-        # Generate Result
+        # Generate Result Object Json
         data_analyse_objects = []
         source_name_files = []
         for result in result_analyse:
@@ -82,15 +86,38 @@ class CalculateSimilarity(APIView):
         return Response(data_final_analyse)
 
 
+def files_already_analyzed(list, file1, file2):
+    if len(list) <= 0:
+        return None
+
+    for item in list:
+        item_name_file1 = item.__getattribute__('name_file1')
+        item_name_file2 = item.__getattribute__('name_file2')
+        percent_plagiarism = item.__getattribute__('percent_plagiarism')
+        similar_sets_log1 = item.__getattribute__('similar_sets_log1')
+        similar_sets_log2 = item.__getattribute__('similar_sets_log2')
+        # Se essa combinação de Doc já foi analisada, retorna apenas atualziando os valores
+        if item_name_file2 == file1 and item_name_file1 == file2:
+            analyse = AnalyseResult()
+            analyse.name_file1 = item_name_file2
+            analyse.name_file2 = item_name_file1
+            analyse.similar_sets_log1 = similar_sets_log2
+            analyse.similar_sets_log2 = similar_sets_log1
+            analyse.percent_plagiarism = percent_plagiarism
+            return analyse
+
+    return None
+
+
 def analyse_docs(file_name1, file_name2, doc1, doc2):
     text_manipulation = TextManipulation()
     similarity = Similarity()
 
-    # # FEM REPLICA ESSE ALGORITMO DE LA AQUI
+    # # FEM
     doc1_segmented = text_manipulation.segmentation_based_sentences(doc1)
     doc2_segmented = text_manipulation.segmentation_based_sentences(doc2)
 
-    # #  SIMILARITY 1: (doc1 em relação ao doc2) SÓ REPLICAR O METODO AQUI:
+    # #  SIMILARITY 1: (doc1 em relação ao doc2)
     qntd_similar_sets1, similar_sets_log1 = similarity.calculate_similar_sets_in_docs(doc1_segmented, doc2_segmented)
     degree_resemblance1 = similarity.degree_resemblance(qntd_similar_sets1, len(doc1_segmented))
 
@@ -180,7 +207,7 @@ def generate_pdf(data):
         lenstring = ceil((len(text) / 80))
         y = y - ((size * lenstring) * 2.5)
 
-        # CONTEUDO
+        # CONTEUDO (X EM RELACAO A Y)
         for file_rel in relation_files:
             name_of_document_dest = file_rel.get('name_file_dest')
             name_of_document_dest = name_of_document_dest.split('.', 1)[0]
@@ -190,10 +217,10 @@ def generate_pdf(data):
             canvas.setFont("Helvetica", 15)
             textobject = canvas.beginText(40, y)
             text = 'Documento ' + name_of_document_source + " em relação ao Documento " + name_of_document_dest + ": "
-            wraped_text = "\n".join(wrap(text, 60))
+            wraped_text = "\n".join(wrap(text, 80))
             textobject.textLines(wraped_text)
             canvas.drawText(textobject)
-            lenstring = ceil((len(text) / 60))
+            lenstring = ceil((len(text) / 80))
             y = y - ((size * lenstring) * 1.5)
 
             canvas.setFont("Helvetica", 13)
@@ -210,9 +237,9 @@ def generate_pdf(data):
 
                 # Calcula se vai caber toda a sentenca na pagina, caso nao caiba, nova pagina
                 calc_axisy = y - ((size * 2.5) + (size * 1.5) + ((size * lenstring) * 1.5))
-                if (calc_axisy <= 0):
+                if (calc_axisy <= 30):
                     canvas.showPage()
-                    y = 780
+                    y = 770
 
                 canvas.setFont("Helvetica", size)
                 y = y - (size * 2.5)
@@ -237,6 +264,8 @@ def generate_pdf(data):
 
             # troca pagina
             canvas.showPage()
+            y = 750
+            size = 16
 
         # salva documento
         canvas.save()

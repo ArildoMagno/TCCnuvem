@@ -3,6 +3,9 @@
 # idea
 .idea
 
+# staticfiles
+staticfiles
+
 #package-lock
 package-lock.json
 
