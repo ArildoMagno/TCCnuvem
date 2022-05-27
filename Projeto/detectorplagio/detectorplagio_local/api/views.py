@@ -27,11 +27,9 @@ class CalculateSimilarity(APIView):
             file_data = FileData()
             text = ''
             name = file.name
-
             for line in file:
                 text += line.decode() + ' '
             text = text[:-1]
-
             file_data.name_file = name
             file_data.text = text
             files_data_store.append(file_data)
@@ -41,10 +39,16 @@ class CalculateSimilarity(APIView):
         for file1 in files_data_store:
             for file2 in files_data_store:
                 if file1.name_file != file2.name_file:
-                    result = analyse_docs(file1.name_file, file2.name_file, file1.text, file2.text)
-                    result_analyse.append(result)
+                    # Verifica se os documentos ainda não foram analisados pois (doc1,doc2) == (doc2,doc1)
+                    files_already_analysed = files_already_analyzed(result_analyse, file1.name_file, file2.name_file)
+                    # Caso não tiverem analisa, e caso já, apenas busca o resultado
+                    if files_already_analysed == None:
+                        result = analyse_docs(file1.name_file, file2.name_file, file1.text, file2.text)
+                        result_analyse.append(result)
+                    else:
+                        result_analyse.append(files_already_analysed)
 
-        # Generate Result
+        # Generate Result Object Json
         data_analyse_objects = []
         source_name_files = []
         for result in result_analyse:
@@ -82,19 +86,38 @@ class CalculateSimilarity(APIView):
         return Response(data_final_analyse)
 
 
+def files_already_analyzed(list, file1, file2):
+    if len(list) <= 0:
+        return None
+
+    for item in list:
+        item_name_file1 = item.__getattribute__('name_file1')
+        item_name_file2 = item.__getattribute__('name_file2')
+        percent_plagiarism = item.__getattribute__('percent_plagiarism')
+        similar_sets_log1 = item.__getattribute__('similar_sets_log1')
+        similar_sets_log2 = item.__getattribute__('similar_sets_log2')
+        # Se essa combinação de Doc já foi analisada, retorna apenas atualziando os valores
+        if item_name_file2 == file1 and item_name_file1 == file2:
+            analyse = AnalyseResult()
+            analyse.name_file1 = item_name_file2
+            analyse.name_file2 = item_name_file1
+            analyse.similar_sets_log1 = similar_sets_log2
+            analyse.similar_sets_log2 = similar_sets_log1
+            analyse.percent_plagiarism = percent_plagiarism
+            return analyse
+
+    return None
+
+
 def analyse_docs(file_name1, file_name2, doc1, doc2):
     text_manipulation = TextManipulation()
     similarity = Similarity()
 
-    # # FEM REPLICA ESSE ALGORITMO DE LA AQUI
+    # # FEM
     doc1_segmented = text_manipulation.segmentation_based_sentences(doc1)
     doc2_segmented = text_manipulation.segmentation_based_sentences(doc2)
 
-    # PARA DEBUGAR
-    if file_name1 == 'example2.txt' and file_name2 == 'example3.txt':
-        print("DEBUG AQUI")
-
-    # #  SIMILARITY 1: (doc1 em relação ao doc2) SÓ REPLICAR O METODO AQUI:
+    # #  SIMILARITY 1: (doc1 em relação ao doc2)
     qntd_similar_sets1, similar_sets_log1 = similarity.calculate_similar_sets_in_docs(doc1_segmented, doc2_segmented)
     degree_resemblance1 = similarity.degree_resemblance(qntd_similar_sets1, len(doc1_segmented))
 
