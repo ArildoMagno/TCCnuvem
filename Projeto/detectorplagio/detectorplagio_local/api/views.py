@@ -207,7 +207,9 @@ def generate_pdf(data):
         relation_files = document.get('relation_files')
 
         # CRIA DOCUMENTO:
-        dest_filename = name_of_document_source.replace(".txt", ".pdf")
+        pre, ext = os.path.splitext(name_of_document_source)
+        dest_filename = pre + ".pdf"
+
         canvas = Canvas("temppdf/" + dest_filename, pagesize=A4)
         pagesize = canvas._pagesize
         page_width = pagesize[0]
@@ -290,7 +292,7 @@ def generate_pdf(data):
                 wraped_text = "\n".join(wrap(sentencedoc2, 120))  # 120 is line width
                 textobject.textLines(wraped_text)
                 canvas.drawText(textobject)
-
+                y = y - ((size * lenstring) * 1.5)
                 count += 1
 
             # troca pagina

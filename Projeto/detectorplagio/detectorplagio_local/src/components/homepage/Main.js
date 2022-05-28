@@ -12,14 +12,15 @@ export default class Main extends Component {
     constructor(props) {
         super(props);
 
-
         this.state = {
             file: true,
             result_calc: Array,
-            isResultPageVisible: false,
-            fileUploadState: "",
+            is_result_page_visible: false,
+            file_upload_state: "",
             loading: false,
-            errorMessage: false,
+            error_message_number_files: false,
+            error_message_type_files: false,
+            error_message_name_files: false,
         };
 
         this.calculateSimilarity = this.calculateSimilarity.bind(this);
@@ -34,11 +35,37 @@ export default class Main extends Component {
 
     fileUploadInputChange = (e) => {
         if (e.target.files.length <= 1) {
-            this.setState({errorMessage: true});
+            this.setState({error_message_number_files: true});
             return
         }
 
-        this.setState({fileUploadState: e.target.files, errorMessage: false, loading: true}, () => {
+        for (let i = 0; i < e.target.files.length; i++) {
+            if (i + 1 < e.target.files.length) {
+                var file1 = e.target.files[i].name.split('.')
+                var file2 = e.target.files[i + 1].name.split('.')
+                var fileName1 = file1[0]
+                var fileName2 = file2[0]
+                var fileExt = file1[1]
+
+                //Not Accept Types
+                console.log("FileExt:", fileExt)
+                if (fileExt !== 'pdf' && fileExt !== 'txt' && fileExt !== 'docx') {
+                    this.setState({error_message_type_files: true});
+                    return
+                }
+
+                //Same Name
+                if (fileName1 === fileName2) {
+                    this.setState({error_message_name_files: true});
+                    return
+                }
+            }
+        }
+
+        this.setState({
+            file_upload_state: e.target.files, error_message_number_files: false,
+            error_message_type_files: false, error_message_name_files: false, loading: true
+        }, () => {
             this.handleSubmit(e)
         });
     }
@@ -50,15 +77,15 @@ export default class Main extends Component {
 
     showResultPage(result) {
         this.setState({
-            isResultPageVisible: true,
+            is_result_page_visible: true,
             result_calc: result
         });
     }
 
     calculateSimilarity() {
         var data = new FormData()
-        for (let i = 0; i < this.state.fileUploadState.length; i++) {
-            data.append('file', this.state.fileUploadState[i])
+        for (let i = 0; i < this.state.file_upload_state.length; i++) {
+            data.append('file', this.state.file_upload_state[i])
         }
 
         const requestOptions = {
@@ -122,7 +149,13 @@ export default class Main extends Component {
                             Envie os arquivos que deseja analisar.
                         </Typography>
 
-                        {this.state.errorMessage && <Alert severity="error">Envie mais de um arquivo!</Alert>}
+
+                        {this.state.error_message_number_files &&
+                            <Alert severity="error">Envie mais de um arquivo!</Alert>}
+                        {this.state.error_message_type_files &&
+                            <Alert severity="error">Tipos de arquivos aceitos: txt, pdf, docx!</Alert>}
+                        {this.state.error_message_name_files &&
+                            <Alert severity="error">Envie arquivos com nomes distintos!</Alert>}
 
                         <Stack
                             sx={{pt: 4}}
@@ -163,7 +196,7 @@ export default class Main extends Component {
                 </Box>
 
 
-                {this.state.isResultPageVisible ?
+                {this.state.is_result_page_visible ?
                     <Redirect push to={{
                         pathname: '/result',
                         state: this.state.result_calc
