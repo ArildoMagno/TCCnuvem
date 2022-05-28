@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
+
 from .data_manipulation.similarity import Similarity
 from .data_manipulation.textdata import TextManipulation
 from math import ceil
@@ -14,6 +15,15 @@ from os import walk
 import os
 import shutil
 
+from pdfminer import high_level
+import docx2txt
+
+import os
+from django.core.files.storage import default_storage
+from django.core.files.base import ContentFile
+from django.conf import settings
+import textract
+
 
 class CalculateSimilarity(APIView):
     def post(self, request, format=None):
@@ -24,14 +34,16 @@ class CalculateSimilarity(APIView):
         files_data_store = []
 
         for file in files:
+            # cria objeto tipo arquivo
             file_data = FileData()
-            text = ''
             name = file.name
-            for line in file:
-                text += line.decode() + ' '
-            text = text[:-1]
+
+            # extrai o texto do arquivo
+            text = extract_text(file)
+
             file_data.name_file = name
             file_data.text = text
+            # adiciona na lista de arquivos
             files_data_store.append(file_data)
 
         # Analyse Files:
@@ -39,6 +51,7 @@ class CalculateSimilarity(APIView):
         for file1 in files_data_store:
             for file2 in files_data_store:
                 if file1.name_file != file2.name_file:
+                    # Otimização
                     # Verifica se os documentos ainda não foram analisados pois (doc1,doc2) == (doc2,doc1)
                     files_already_analysed = files_already_analyzed(result_analyse, file1.name_file, file2.name_file)
                     # Caso não tiverem analisa, e caso já, apenas busca o resultado
@@ -84,6 +97,24 @@ class CalculateSimilarity(APIView):
             })
 
         return Response(data_final_analyse)
+
+
+# Extrai texto de .txt,.pdf,.docx
+def extract_text(file):
+    name = file.name
+    obj = file.file
+    extracted_text = ""
+
+    if name.endswith('.pdf'):
+        extracted_text = high_level.extract_text(obj, "")
+    elif name.endswith('.txt'):
+        for line in obj:
+            extracted_text += line.decode() + ' '
+        extracted_text = extracted_text[:-1]
+    elif name.endswith('.docx'):
+        extracted_text = docx2txt.process(obj)
+
+    return extracted_text
 
 
 def files_already_analyzed(list, file1, file2):
