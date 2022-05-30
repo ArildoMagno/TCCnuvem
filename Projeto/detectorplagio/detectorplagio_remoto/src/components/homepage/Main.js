@@ -71,7 +71,13 @@ export default class Main extends Component {
 
     async handleSubmit(event) {
         event.preventDefault()
-        this.calculateSimilarity();
+
+        var data = new FormData()
+        for (let i = 0; i < this.state.file_upload_state.length; i++) {
+            data.append('file', this.state.file_upload_state[i])
+        }
+
+        this.calculateSimilarity(data);
     }
 
     showResultPage(result) {
@@ -81,12 +87,7 @@ export default class Main extends Component {
         });
     }
 
-    calculateSimilarity() {
-        var data = new FormData()
-        for (let i = 0; i < this.state.file_upload_state.length; i++) {
-            data.append('file', this.state.file_upload_state[i])
-        }
-
+    calculateSimilarity(data) {
         const requestOptions = {
             method: "POST",
             redirect: "follow",
@@ -100,17 +101,21 @@ export default class Main extends Component {
         fetch(location, requestOptions)
             .then(response => response.json())
             .then((response) => {
-                this.setState({
-                    loading: false,
-                });
-                this.showResultPage(response)
-            })
-            .catch(error => {
-                console.log(error)
-                this.setState({
-                    loading: false,
-                });
-            })
+                    if (response !== "processing") {
+                        this.setState({
+                            loading: false,
+                        });
+                        this.showResultPage(response)
+                    } else {
+                        setTimeout(
+                            () => this.calculateSimilarity(data),
+                            15000
+                        );
+                    }
+                }
+            );
+
+
     }
 
     render() {

@@ -1,6 +1,7 @@
 import wn
 
 wn.config.data_directory = 'wn_data'
+wn.config.allow_multithreading = True
 from wn.similarity import wup
 from .constants import SYNONYMGROUPNOTFOUND
 
