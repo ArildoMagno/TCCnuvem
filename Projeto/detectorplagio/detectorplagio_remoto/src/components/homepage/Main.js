@@ -36,6 +36,8 @@ export default class Main extends Component {
 
     handleClick = async (event) => {
         event.preventDefault();
+        this.cleanFiles()
+
         try {
             const newArr = event.target.files;
 
@@ -48,7 +50,10 @@ export default class Main extends Component {
                 }
                 return data
             }).then((values_data) => {
-                this.calculateSimilarity(values_data)
+                let validate = this.validate_files(newArr)
+                if (validate) {
+                    this.calculateSimilarity(values_data)
+                }
             });
         } catch (e) {
             console.error(e);
@@ -62,8 +67,35 @@ export default class Main extends Component {
         });
     }
 
+    validate_files(files) {
+        let validate = true
+
+        if (files.length <= 1) {
+            validate = false
+        }
+
+        return validate
+    }
+
+    cleanFiles() {
+        // Local:
+        // var location = "http://127.0.0.1:8000/api/clean-files"
+        // Remoto:
+        var location = "/api/clean-files"
+        axios.post(location)
+    }
+
+
     calculateSimilarity(data) {
         console.log("calcula similaridade")
+
+
+        this.setState({
+            loading: true,
+            error_message_number_files: false,
+            error_message_type_files: false,
+            error_message_name_files: false
+        })
         // Local:
         // var location = "http://127.0.0.1:8000/api/calculate-similarity"
         // Remoto:
@@ -85,6 +117,7 @@ export default class Main extends Component {
                             () => this.calculateSimilarity(data),
                             20000
                         );
+
                     }
 
                 }
