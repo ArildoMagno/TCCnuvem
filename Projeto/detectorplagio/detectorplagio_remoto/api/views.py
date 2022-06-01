@@ -17,7 +17,6 @@ import api.pdf_generator.pdf as pdf_generator
 
 class CalculateSimilarity(APIView):
     def post(self, request, format=None):
-        print("FUNCAO ORIGINAL")
         # Not remove variable data (cause heroku error!):
         data = request.data
         if not os.path.exists("api/analyse_flags"):
@@ -25,7 +24,6 @@ class CalculateSimilarity(APIView):
 
         # cria o lock da task executando:
         if not os.path.exists("api/analyse_flags/processing-lock.txt"):
-            print("NOVO PROCESSO")
             open("api/analyse_flags/processing-lock.txt", mode='w').close()
 
             # pega os dados dos arquivos
@@ -46,7 +44,6 @@ class CalculateSimilarity(APIView):
                 delete_flags()
                 return Response(config_dictionary)
         else:
-            print("RECHAMANDO PROCESSO")
             if not os.path.exists("api/analyse_flags/result_analyse.dictionary"):
                 return Response("processing")
             else:

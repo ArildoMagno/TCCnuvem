@@ -42,7 +42,6 @@ export default class Main extends Component {
             const newArr = event.target.files;
 
             await Promise.all(newArr).then((values) => {
-                console.log("values:", values);
                 const data = new FormData()
                 for (let i = 0; i < values.length; i++) {
                     let locale = "file"
@@ -72,6 +71,27 @@ export default class Main extends Component {
 
         if (files.length <= 1) {
             validate = false
+            this.setState({error_message_number_files: true})
+        }
+
+        for (let i = 0; i < files.length; i++) {
+            if (i + 1 < files.length) {
+                let file1 = files[i].name.split('.')
+                let file2 = files[i + 1].name.split('.')
+                let fileName1 = file1[0]
+                let fileName2 = file2[0]
+                let fileExt = file1[1]
+
+                if (fileExt !== 'pdf' && fileExt !== 'txt' && fileExt !== 'docx') {
+                    validate = false
+                    this.setState({error_message_type_files: true});
+                }
+
+                if (fileName1 === fileName2) {
+                    validate = false
+                    this.setState({error_message_name_files: true});
+                }
+            }
         }
 
         return validate
@@ -79,16 +99,14 @@ export default class Main extends Component {
 
     cleanFiles() {
         // Local:
-        // var location = "http://127.0.0.1:8000/api/clean-files"
+        // let location = "http://127.0.0.1:8000/api/clean-files"
         // Remoto:
-        var location = "/api/clean-files"
+        let location = "/api/clean-files"
         axios.post(location)
     }
 
 
     calculateSimilarity(data) {
-        console.log("calcula similaridade")
-
 
         this.setState({
             loading: true,
@@ -97,16 +115,15 @@ export default class Main extends Component {
             error_message_name_files: false
         })
         // Local:
-        // var location = "http://127.0.0.1:8000/api/calculate-similarity"
+        // let location = "http://127.0.0.1:8000/api/calculate-similarity"
         // Remoto:
-        var location = "/api/calculate-similarity"
+        let location = "/api/calculate-similarity"
         axios.post(location, data, {
             headers: {
                 'Content-Type': 'multipart/form-data'
             }
         })
             .then((response) => {
-                    console.log("response:", response.data)
                     if (response.data !== "processing") {
                         this.setState({
                             loading: false,
