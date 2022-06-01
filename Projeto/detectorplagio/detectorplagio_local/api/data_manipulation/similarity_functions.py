@@ -134,8 +134,11 @@ class Similarity:
 
     def degree_resemblance(self, qntd_similar_sets, tam):
         # Trabalho HTML
-        calc = len(qntd_similar_sets) / tam
-        calc = round(calc, 2)
+        if qntd_similar_sets == 0:
+            calc = 0
+        else:
+            calc = len(qntd_similar_sets) / tam
+            calc = round(calc, 2)
         return calc
 
     def odds_ratio_in_percent(self, resemblance1, resemblance2):

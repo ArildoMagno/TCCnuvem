@@ -7,6 +7,7 @@ import {createTheme} from '@mui/material/styles';
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import CssBaseline from "@mui/material/CssBaseline";
+import axios from "axios";
 
 
 createTheme();
@@ -41,30 +42,25 @@ export default class ResultPage extends Component {
     }
 
     generate_pdf(result) {
-        const requestOptions = {
-            method: "POST",
-            responseType: 'blob',
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify(result),
-        }
 
         // Local:
         // var location = "http://127.0.0.1:8000/api/generate-pdf"// Remoto:
         // Remoto:
         var location = "/api/generate-pdf"
-        fetch(location, requestOptions)
-            .then(response => response.blob())
-            .then(blob => URL.createObjectURL(blob))
-            .then(uril => {
-                var link = document.createElement("a");
-                link.href = uril;
-                link.download = "relatorio.zip";
-                document.body.appendChild(link);
-                link.click();
-                document.body.removeChild(link);
-            });
+        axios({
+            url: location, //your url
+            method: 'POST',
+            responseType: 'blob',// important
+            data: result,
+        }).then((response) => {
+            const url = window.URL.createObjectURL(new Blob([response.data]));
+            const link = document.createElement('a');
+            link.href = url;
+            link.setAttribute('download', 'relatorio.zip'); //or any other extension
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        });
     }
 
 

@@ -46,7 +46,6 @@ class FileData:
 
 
 def get_info_from_files(request):
-    # Get infos from files:
     data = request.data
     dits = dict(data.lists())
     files = dits.get('file')
@@ -56,12 +55,10 @@ def get_info_from_files(request):
         file_data = FileData()
         name = file.name
 
-        # extrai o texto do arquivo
         text = extract_text(file)
 
         file_data.name_file = name
         file_data.text = text
-        # adiciona na lista de arquivos
         files_data_store.append(file_data)
 
     return files_data_store
@@ -82,4 +79,5 @@ def extract_text(file):
     elif name.endswith('.docx'):
         extracted_text = docx2txt.process(obj)
 
+    extracted_text = " ".join(extracted_text.split())
     return extracted_text

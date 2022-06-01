@@ -7,6 +7,7 @@ import Button from "@mui/material/Button";
 import {Redirect} from 'react-router-dom';
 import LoadingSpin from "react-loading-spin";
 import {Alert} from "@mui/material";
+import axios from "axios";
 
 export default class Main extends Component {
     constructor(props) {
@@ -24,7 +25,6 @@ export default class Main extends Component {
         };
 
         this.calculateSimilarity = this.calculateSimilarity.bind(this);
-        this.handleSubmit = this.handleSubmit.bind(this);
         this.inputReference = React.createRef();
 
     }
@@ -33,52 +33,27 @@ export default class Main extends Component {
         this.inputReference.current.click();
     }
 
-    fileUploadInputChange = (e) => {
-        if (e.target.files.length <= 1) {
-            this.setState({error_message_number_files: true});
-            return
-        }
 
-        for (let i = 0; i < e.target.files.length; i++) {
-            if (i + 1 < e.target.files.length) {
-                var file1 = e.target.files[i].name.split('.')
-                var file2 = e.target.files[i + 1].name.split('.')
-                var fileName1 = file1[0]
-                var fileName2 = file2[0]
-                var fileExt = file1[1]
+    handleClick = async (event) => {
+        event.preventDefault();
+        try {
+            const newArr = event.target.files;
 
-                //Not Accept Types
-                if (fileExt !== 'pdf' && fileExt !== 'txt' && fileExt !== 'docx') {
-                    this.setState({error_message_type_files: true});
-                    return
+            await Promise.all(newArr).then((values) => {
+                console.log("values:", values);
+                const data = new FormData()
+                for (let i = 0; i < values.length; i++) {
+                    let locale = "file"
+                    data.append(locale, values[i])
                 }
-
-                //Same Name
-                if (fileName1 === fileName2) {
-                    this.setState({error_message_name_files: true});
-                    return
-                }
-            }
+                return data
+            }).then((values_data) => {
+                this.calculateSimilarity(values_data)
+            });
+        } catch (e) {
+            console.error(e);
         }
-
-        this.setState({
-            file_upload_state: e.target.files, error_message_number_files: false,
-            error_message_type_files: false, error_message_name_files: false, loading: true
-        }, () => {
-            this.handleSubmit(e)
-        });
-    }
-
-    async handleSubmit(event) {
-        event.preventDefault()
-
-        var data = new FormData()
-        for (let i = 0; i < this.state.file_upload_state.length; i++) {
-            data.append('file', this.state.file_upload_state[i])
-        }
-
-        this.calculateSimilarity(data);
-    }
+    };
 
     showResultPage(result) {
         this.setState({
@@ -88,38 +63,40 @@ export default class Main extends Component {
     }
 
     calculateSimilarity(data) {
-        const requestOptions = {
-            method: "POST",
-            redirect: "follow",
-            body: data,
-        }
-
+        console.log("calcula similaridade")
         // Local:
         var location = "http://127.0.0.1:8000/api/calculate-similarity"
         // Remoto:
         // var location = "/api/calculate-similarity"
-        fetch(location, requestOptions)
-            .then(response => response.json())
+        axios.post(location, data, {
+            headers: {
+                'Content-Type': 'multipart/form-data'
+            }
+        })
             .then((response) => {
-                    if (response !== "processing") {
+                    console.log("response:", response.data)
+                    if (response.data !== "processing") {
                         this.setState({
                             loading: false,
                         });
-                        this.showResultPage(response)
+                        this.showResultPage(response.data)
                     } else {
                         setTimeout(
                             () => this.calculateSimilarity(data),
-                            15000
+                            20000
                         );
                     }
+
                 }
-            );
+            )
+            .catch(error => {
+                console.log(error)            // check if any error
+            })
 
 
     }
 
     render() {
-
 
         return (
 
@@ -176,7 +153,7 @@ export default class Main extends Component {
                                 multiple
                                 hidden
                                 ref={this.inputReference}
-                                onChange={this.fileUploadInputChange}/>
+                                onChange={this.handleClick}/>
 
                             {this.state.loading ? <LoadingSpin primaryColor="#92A8D1"/>
                                 :

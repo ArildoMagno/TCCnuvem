@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
+
+from pdfminer import high_level
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from django.http import HttpResponse
@@ -10,20 +12,27 @@ import shutil
 import os
 
 import api.pdf_generator.pdf as pdf_generator
-# import pdf_generator.pdf
 import api.data_manipulation.textdata as text_data
 import api.data_manipulation.similarity_analysedocs as similarity_analyse_docs
 
 
 class CalculateSimilarity(APIView):
     def post(self, request, format=None):
+        print("CHEGA AQUI:")
+        t = request.data
+        print(t)
+        if not os.path.exists("api/analyse_flags"):
+            os.makedirs("api/analyse_flags")
 
         # cria o lock da task executando:
-        if not os.path.exists("api/analyse_flags/processing-lock"):
-            open("api/analyse_flags/processing-lock", mode='w').close()
+        if not os.path.exists("api/analyse_flags/processing-lock.txt"):
+            open("api/analyse_flags/processing-lock.txt", mode='w').close()
 
             # pega os dados dos arquivos
+            print("VAI EXTRAIR CONTEUDO:")
             info_files = text_data.get_info_from_files(request)
+            print("INFOFILES:", info_files)
+
             # inicia a thread
             thread_long = ThreadLong(data=info_files)
             thread_long.start()
