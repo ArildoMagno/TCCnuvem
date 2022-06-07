@@ -96,11 +96,13 @@ def analyse_docs(file_name1, file_name2, doc1, doc2):
     doc2_segmented = text_manipulation.segmentation_based_sentences(doc2)
 
     # #  SIMILARITY 1: (doc1 em relação ao doc2)
-    qntd_similar_sets1, similar_sets_log1 = similarity.calculate_similar_sets_in_docs(doc1_segmented, doc2_segmented)
+    qntd_similar_sets1, similar_sets_log1, sentences_analysed1 = similarity.calculate_similar_sentences_in_docs(
+        doc1_segmented, doc2_segmented, [])
     degree_resemblance1 = similarity.degree_resemblance(qntd_similar_sets1, len(doc1_segmented))
 
     #  SIMILARITY 2: (doc2 em relação ao doc1)
-    qntd_similar_sets2, similar_sets_log2 = similarity.calculate_similar_sets_in_docs(doc2_segmented, doc1_segmented)
+    qntd_similar_sets2, similar_sets_log2, sentences_analysed2 = similarity.calculate_similar_sentences_in_docs(
+        doc2_segmented, doc1_segmented, sentences_analysed1)
     degree_resemblance2 = similarity.degree_resemblance(qntd_similar_sets2, len(doc2_segmented))
 
     percent_plagiarism = similarity.odds_ratio_in_percent(degree_resemblance1, degree_resemblance2)
