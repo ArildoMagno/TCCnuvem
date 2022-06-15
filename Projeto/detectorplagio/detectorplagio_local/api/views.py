@@ -19,12 +19,15 @@ class CalculateSimilarity(APIView):
     def post(self, request, format=None):
         # Not remove variable data (cause heroku error!):
         data = request.data
+
         if not os.path.exists("api/analyse_flags"):
             os.makedirs("api/analyse_flags")
 
         # cria o lock da task executando:
         if not os.path.exists("api/analyse_flags/processing-lock.txt"):
-            open("api/analyse_flags/processing-lock.txt", mode='w').close()
+            with open("api/analyse_flags/processing-lock.txt", "w") as f:
+                f.write(str(0))
+                f.close()
 
             # pega os dados dos arquivos
             info_files = text_data.get_info_from_files(request)
@@ -35,7 +38,11 @@ class CalculateSimilarity(APIView):
 
             # se ainda nao terminou de processingar
             if not os.path.exists("api/analyse_flags/result_analyse.dictionary"):
-                return Response("processing")
+                with open('api/analyse_flags/processing-lock.txt', 'rb') as f:
+                    data_file = int(f.read())
+                    calc = data_file / len(info_files)
+                    f.close()
+                return Response(calc)
             else:
                 # Show Info:
                 with open('api/analyse_flags/result_analyse.dictionary', 'rb') as config_dictionary_file:
@@ -45,7 +52,15 @@ class CalculateSimilarity(APIView):
                 return Response(config_dictionary)
         else:
             if not os.path.exists("api/analyse_flags/result_analyse.dictionary"):
-                return Response("processing")
+                with open('api/analyse_flags/processing-lock.txt', 'rb') as f:
+                    data_file = int(f.read())
+                    dits = dict(data.lists())
+                    files = dits.get('file')
+
+                    calc = data_file / len(files)
+                    f.close()
+
+                return Response(calc)
             else:
                 # Show Info:
                 with open('api/analyse_flags/result_analyse.dictionary', 'rb') as config_dictionary_file:

@@ -1,13 +1,12 @@
 import React, {Component} from "react";
-import BarGraph from "./resultpage/BarGraph";
 import AppBarPageBackButton from "./homepage/AppBarPageBackButton";
 import Grid from '@mui/material/Grid';
 import Container from '@mui/material/Container';
 import {createTheme} from '@mui/material/styles';
-import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import CssBaseline from "@mui/material/CssBaseline";
 import axios from "axios";
+import Graph from "./resultpage/Graph";
 
 
 createTheme();
@@ -73,22 +72,9 @@ export default class ResultPage extends Component {
                 <Container sx={{py: 8}} maxWidth="md">
 
                     <Grid container spacing={4}>
-                        {this.props.location.state.map((document, index) => (
 
-                            <Grid item xs={12} sm={6} md={8} lg={8} key={index} justifyContent={"center"}
-                                  style={{display: "flex", flexWrap: "wrap"}}>
+                        <Graph datafiles={this.props.location.state}/>
 
-                                <Grid item>
-                                    <Typography variant="h6" color="text.secondary" paragraph>
-                                        Arquivo: {document.name_file_source}
-                                    </Typography>
-
-                                    <BarGraph datafiles={document.relation_files}/>
-                                </Grid>
-
-                                <Grid item xs={12} sm={12} md={12} lg={12}></Grid>
-                            </Grid>
-                        ))}
 
                         <Grid item xs={12} sm={12} md={12} lg={12}></Grid>
                         <Grid item xs={12} sm={12} md={12} lg={12}></Grid>

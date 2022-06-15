@@ -5,9 +5,11 @@ import Typography from "@mui/material/Typography";
 import Stack from "@mui/material/Stack";
 import Button from "@mui/material/Button";
 import {Redirect} from 'react-router-dom';
-import LoadingSpin from "react-loading-spin";
+
 import {Alert} from "@mui/material";
 import axios from "axios";
+
+import Loading from "./Loading"
 
 export default class Main extends Component {
     constructor(props) {
@@ -22,21 +24,22 @@ export default class Main extends Component {
             error_message_number_files: false,
             error_message_type_files: false,
             error_message_name_files: false,
+            percentage: 0,
         };
 
-        this.calculateSimilarity = this.calculateSimilarity.bind(this);
+        this.calculate_similarity = this.calculate_similarity.bind(this);
         this.inputReference = React.createRef();
 
     }
 
-    fileUploadAction = () => {
+    file_upload_action = () => {
         this.inputReference.current.click();
     }
 
 
-    handleClick = async (event) => {
+    handle_click = async (event) => {
         event.preventDefault();
-        this.cleanFiles()
+        this.clean_files()
 
         try {
             const newArr = event.target.files;
@@ -51,7 +54,7 @@ export default class Main extends Component {
             }).then((values_data) => {
                 let validate = this.validate_files(newArr)
                 if (validate) {
-                    this.calculateSimilarity(values_data)
+                    this.calculate_similarity(values_data)
                 }
             });
         } catch (e) {
@@ -59,7 +62,7 @@ export default class Main extends Component {
         }
     };
 
-    showResultPage(result) {
+    show_result_page(result) {
         this.setState({
             is_result_page_visible: true,
             result_calc: result
@@ -97,7 +100,7 @@ export default class Main extends Component {
         return validate
     }
 
-    cleanFiles() {
+    clean_files() {
         // Local:
         let location = "http://127.0.0.1:8000/api/clean-files"
         // Remoto:
@@ -105,8 +108,7 @@ export default class Main extends Component {
         axios.post(location)
     }
 
-
-    calculateSimilarity(data) {
+    calculate_similarity(data) {
 
         this.setState({
             loading: true,
@@ -124,33 +126,39 @@ export default class Main extends Component {
             }
         })
             .then((response) => {
-                    if (response.data !== "processing") {
-                        this.setState({
-                            loading: false,
-                        });
-                        this.showResultPage(response.data)
-                    } else {
+                    if (typeof response.data === 'object' && response.data !== null) {
+                        this.setState({percentage: 100})
+
                         setTimeout(
-                            () => this.calculateSimilarity(data),
-                            20000
+                            () => this.show_result_page(response.data),
+                            2000
                         );
 
-                    }
 
+                    } else {
+                        this.setState({percentage: (response.data.toFixed(2) * 100)})
+
+                        setTimeout(
+                            () => this.calculate_similarity(data),
+                            5000
+                        );
+                    }
                 }
             )
             .catch(error => {
-                console.log(error)            // check if any error
+                console.log(error)
             })
 
 
     }
+
 
     render() {
 
         return (
 
             <main>
+
                 {/* Hero unit */}
                 <Box
                     sx={{
@@ -203,12 +211,16 @@ export default class Main extends Component {
                                 multiple
                                 hidden
                                 ref={this.inputReference}
-                                onChange={this.handleClick}/>
+                                onChange={this.handle_click}/>
 
-                            {this.state.loading ? <LoadingSpin primaryColor="#92A8D1"/>
+
+                            {this.state.loading ?
+                                <div align={"center"}>
+                                    <Loading percentage={this.state.percentage}/>
+                                </div>
                                 :
                                 <Button
-                                    onClick={this.fileUploadAction}
+                                    onClick={this.file_upload_action}
                                     variant="contained"
                                     style={{
                                         borderRadius: 35,

@@ -1,3 +1,5 @@
+import os
+
 import api.data_manipulation.textdata as text_data
 import api.data_manipulation.similarity_functions as similarity_data
 
@@ -23,8 +25,18 @@ def calculate_similarity_function(files_data_store):
                 if files_already_analysed == None:
                     result = analyse_docs(file1.name_file, file2.name_file, file1.text, file2.text)
                     result_analyse.append(result)
+
                 else:
                     result_analyse.append(files_already_analysed)
+
+                # Att o status do processo dos arquivos:
+                if os.path.exists("api/analyse_flags/processing-lock.txt"):
+                    with open("api/analyse_flags/processing-lock.txt", "r+") as f:
+                        data = f.read()
+                        data = int(data) + 1
+                        f.seek(0)
+                        f.write(str(data))
+                        f.close()
 
     # Generate Result Object Json
     data_analyse_objects = []

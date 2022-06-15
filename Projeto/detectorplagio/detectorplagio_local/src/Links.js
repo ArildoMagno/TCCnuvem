@@ -1,7 +1,9 @@
 import React, {Component} from "react";
 import ResultPage from "./components/ResultPage";
 import HomePage from "./components/HomePage";
+import Graph from "./components/resultpage/Graph";
 import history from "./history_locale";
+
 
 import {
     Router,
@@ -16,6 +18,7 @@ export default class Links extends Component {
                 <Switch>
                     <Route exact path="/" component={HomePage}/>
                     <Route path="/result" component={ResultPage}/>
+                    <Route path="/graph" component={Graph}/>
                 </Switch>
             </Router>
         );
