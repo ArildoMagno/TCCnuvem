@@ -33,6 +33,7 @@ class Similarity:
         sentences_analysed = sentences_already_analysed
 
         for sentence1 in doc_segmented1:
+            lock_similar_found = False
             for sentence2 in doc_segmented2:
                 # verifica se essas sentencas ja foram analisadas
                 verify_set = self.verify_sentence_analysed(sentences_analysed,
@@ -56,14 +57,18 @@ class Similarity:
                     # Se forem o suficientemente similar
                     if self.sentences_similar_threshold(uAB, uBA):
                         threshold_high = True
-                        qntd_similar_sets.append(1)
+                        if not lock_similar_found:
+                            qntd_similar_sets.append(1)
+                            lock_similar_found = True
                         similar_sentences_log.append(sentence_result)
                     else:
                         threshold_high = False
                     sentences_analysed.append((sentence_result, threshold_high))
-                # analisados e threshold alto
+                # otimizacao (ja foram analisados) e threshold alto
                 elif verify_set != None and verify_set != False:
-                    qntd_similar_sets.append(1)
+                    if not lock_similar_found:
+                        qntd_similar_sets.append(1)
+                        lock_similar_found = True
                     similar_sentences_log.append(verify_set)
 
         return qntd_similar_sets, similar_sentences_log, sentences_analysed

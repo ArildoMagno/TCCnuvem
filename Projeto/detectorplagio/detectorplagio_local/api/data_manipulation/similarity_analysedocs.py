@@ -22,21 +22,21 @@ def calculate_similarity_function(files_data_store):
                 # Verifica se os documentos ainda não foram analisados pois (doc1,doc2) == (doc2,doc1)
                 files_already_analysed = files_already_analyzed(result_analyse, file1.name_file, file2.name_file)
                 # Caso não tiverem analisa, e caso já, apenas busca o resultado
-                if files_already_analysed == None:
+                if files_already_analysed is None:
                     result = analyse_docs(file1.name_file, file2.name_file, file1.text, file2.text)
                     result_analyse.append(result)
 
                 else:
                     result_analyse.append(files_already_analysed)
 
-                # Att o status do processo dos arquivos:
-                if os.path.exists("api/analyse_flags/processing-lock.txt"):
-                    with open("api/analyse_flags/processing-lock.txt", "r+") as f:
-                        data = f.read()
-                        data = int(data) + 1
-                        f.seek(0)
-                        f.write(str(data))
-                        f.close()
+        # Att o status do processo dos arquivos:
+        if os.path.exists("api/analyse_flags/processing-lock.txt"):
+            with open("api/analyse_flags/processing-lock.txt", "r+") as f:
+                data = f.read()
+                data = int(data) + 1
+                f.seek(0)
+                f.write(str(data))
+                f.close()
 
     # Generate Result Object Json
     data_analyse_objects = []
@@ -76,11 +76,11 @@ def calculate_similarity_function(files_data_store):
     return data_final_analyse
 
 
-def files_already_analyzed(list, file1, file2):
-    if len(list) <= 0:
+def files_already_analyzed(list_files, file1, file2):
+    if len(list_files) <= 0:
         return None
 
-    for item in list:
+    for item in list_files:
         item_name_file1 = item.__getattribute__('name_file1')
         item_name_file2 = item.__getattribute__('name_file2')
         percent_plagiarism = item.__getattribute__('percent_plagiarism')
@@ -106,6 +106,9 @@ def analyse_docs(file_name1, file_name2, doc1, doc2):
     # # FEM
     doc1_segmented = text_manipulation.segmentation_based_sentences(doc1)
     doc2_segmented = text_manipulation.segmentation_based_sentences(doc2)
+
+    # doc1_segmented = text_manipulation.segmentation_based_kgram(doc1)
+    # doc2_segmented = text_manipulation.segmentation_based_kgram(doc2)
 
     # #  SIMILARITY 1: (doc1 em relação ao doc2)
     qntd_similar_sets1, similar_sets_log1, sentences_analysed1 = similarity.calculate_similar_sentences_in_docs(

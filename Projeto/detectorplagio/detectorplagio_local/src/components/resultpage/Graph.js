@@ -59,9 +59,10 @@ export default class Graph extends Component {
                     width: 2,
                 },
                 left: "center",
-                roam: true,
+                //ativa os movimentos no grafico (zoom,etc)
+                // roam: true,
                 force: {
-                    edgeLength: 250,
+                    edgeLength: 350,
                 },
             }
         ]

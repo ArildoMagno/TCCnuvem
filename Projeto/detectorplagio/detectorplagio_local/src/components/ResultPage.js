@@ -1,5 +1,5 @@
 import React, {Component} from "react";
-import AppBarPageBackButton from "./homepage/AppBarPageBackButton";
+import AppBarPageDefault from "./navbar/AppBarPageDefault";
 import Grid from '@mui/material/Grid';
 import Container from '@mui/material/Container';
 import {createTheme} from '@mui/material/styles';
@@ -67,7 +67,7 @@ export default class ResultPage extends Component {
         return (
             <div>
                 <CssBaseline/>
-                <AppBarPageBackButton/>
+                <AppBarPageDefault/>
 
                 <Container sx={{py: 8}} maxWidth="md">
 
