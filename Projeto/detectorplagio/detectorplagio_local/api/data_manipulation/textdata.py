@@ -8,10 +8,6 @@ all_stop_words = nlp.Defaults.stop_words
 
 
 class TextManipulation:
-    def read_text(self, text):
-        text = open(text, mode="r", encoding="utf-8").read()
-        return text
-
     def segmentation_based_sentences(self, text):
         originaltext_segmented = []
         doc = nlp(text)
@@ -116,7 +112,7 @@ def get_info_from_files(request):
         name = file.name
 
         text = extract_text(file)
-
+        text = text.lower()
         file_data.name_file = name
         file_data.text = text
         files_data_store.append(file_data)
