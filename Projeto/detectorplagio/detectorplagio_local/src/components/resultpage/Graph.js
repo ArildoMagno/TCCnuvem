@@ -7,13 +7,21 @@ import {Component} from "react";
 import ReactEcharts from "echarts-for-react";
 
 
-//Chart style
-const style = {
-    height: "55vh",
+// //Chart style
+// const style = {
+//     height: "400px",
+//     width: "600px",
+//     animation: true,
+// };
+// const style_echarts = {
+//     minHeight: "550px",
+//     width: "1200px",
+//     animation: true,
+// };
+const style_echarts = {
+    height: "80vh",
     width: "100%",
-    animation: true,
 };
-
 
 export default class Graph extends Component {
 
@@ -34,19 +42,17 @@ export default class Graph extends Component {
 
 
     option = {
-        title: {
-            text: "Similaridade entre os arquivos"
-        },
-
+        responsive: false,
 
         series: [
             {
                 name: 'Graph Result',
                 type: "graph",
-                layout: 'force',
+                layout: 'circular',
                 symbolSize: 50,
                 label: {
-                    show: true
+                    show: true,
+                    formatter: '{b}'
                 },
 
 
@@ -58,12 +64,15 @@ export default class Graph extends Component {
                     opacity: 0.9,
                     width: 2,
                 },
-                left: "center",
-                //ativa os movimentos no grafico (zoom,etc)
-                // roam: true,
-                force: {
-                    edgeLength: 350,
-                },
+
+                roam: true,
+
+                emphasis: {
+                    focus: 'adjacency',
+                    lineStyle: {
+                        width: 10
+                    }
+                }
             }
         ]
     };
@@ -81,8 +90,6 @@ export default class Graph extends Component {
 
 
     manipulate_infos_graph() {
-        console.log("thisdatafiles:", this.state.datafiles, "data_graph_links", this.data_graph_links, "data_graph_names", this.data_graph_file_names)
-
         let data = this.state.datafiles
 
 
@@ -118,8 +125,13 @@ export default class Graph extends Component {
     render() {
         this.manipulate_infos_graph()
 
+
         return (
-            <ReactEcharts option={this.option} style={style} className="pie-chart"/>
+
+
+
+                <ReactEcharts option={this.option} style={style_echarts}/>
+
         );
     }
 

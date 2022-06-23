@@ -196,7 +196,7 @@ export default class Main extends Component {
                     <div style={{paddingTop: "10vh", paddingBottom: "5vh"}}>
 
 
-                        <div style={{paddingTop: "5vh", paddingBottom: "15vh"}}>
+                        <div style={{paddingBottom: "15vh"}}>
                             <Card sx={{display: 'flex'}}>
                                 <CardContent sx={{flex: 1}}>
                                     <Typography
@@ -213,7 +213,7 @@ export default class Main extends Component {
 
 
                                         <Typography variant="h6" align="center" color="text.secondary" paragraph
-                                                    textAlign={"justify"} padding={"2vh"}>
+                                                    textAlign={"justify"} paddingLeft={"13vh"} paddingRight={"13vh"}>
                                             O sistema recebe arquivos nos formatos (pdf,txt,docx)
                                             e extrai o texto dos arquivos.
                                             Uma vez com o texto extraído é realizado a etapa de segmentação
@@ -227,13 +227,8 @@ export default class Main extends Component {
 
                                     <div>
 
-                                        <Typography variant="h4" gutterBottom style={{paddingTop: "10vh"}}>
-                                            Etapas:
-                                        </Typography>
-
-
                                         <Typography variant="h5" gutterBottom
-                                                    style={{paddingTop: "5vh", paddingLeft: "3vh"}}>
+                                                    style={{paddingTop: "5vh", paddingLeft: "15vh"}}>
                                             Extração do conteúdo dos arquivos
                                         </Typography>
 
@@ -252,7 +247,7 @@ export default class Main extends Component {
 
 
                                         <Typography variant="h5" gutterBottom
-                                                    style={{paddingTop: "5vh", paddingLeft: "3vh"}}>
+                                                    style={{paddingTop: "5vh", paddingLeft: "15vh"}}>
                                             Segmentação do conteúdo dos arquivos
                                         </Typography>
                                         <Grid style={{display: 'flex', justifyContent: 'center'}}>
@@ -265,13 +260,13 @@ export default class Main extends Component {
                                         </Grid>
                                         <Typography variant="h6" align="center" color="text.secondary" paragraph
                                                     paddingTop="2vh">
-                                            Com o conteúdo dos arquivos é gerado uma lista de suas sentenças
+                                            Com o conteúdo dos arquivos é gerado uma lista de suas sentenças.
                                         </Typography>
 
 
                                         <Typography variant="h5" gutterBottom
-                                                    style={{paddingTop: "5vh", paddingLeft: "3vh"}}>
-                                            Etapa de Análise
+                                                    style={{paddingTop: "5vh", paddingLeft: "15vh"}}>
+                                            Análise das sentenças
                                         </Typography>
                                         <Grid style={{display: 'flex', justifyContent: 'center'}}>
                                             <CardMedia
