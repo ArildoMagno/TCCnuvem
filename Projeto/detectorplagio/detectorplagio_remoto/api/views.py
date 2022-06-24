@@ -19,12 +19,15 @@ class CalculateSimilarity(APIView):
     def post(self, request, format=None):
         # Not remove variable data (cause heroku error!):
         data = request.data
+
         if not os.path.exists("api/analyse_flags"):
             os.makedirs("api/analyse_flags")
 
         # cria o lock da task executando:
         if not os.path.exists("api/analyse_flags/processing-lock.txt"):
-            open("api/analyse_flags/processing-lock.txt", mode='w').close()
+            with open("api/analyse_flags/processing-lock.txt", "w") as f:
+                f.write(str(0))
+                f.close()
 
             # pega os dados dos arquivos
             info_files = text_data.get_info_from_files(request)
@@ -33,9 +36,13 @@ class CalculateSimilarity(APIView):
             thread_long = ThreadLong(data=info_files)
             thread_long.start()
 
-            # se ainda nao terminou de processingar
+            # se ainda nao terminou de processar
             if not os.path.exists("api/analyse_flags/result_analyse.dictionary"):
-                return Response("processing")
+                with open('api/analyse_flags/processing-lock.txt', 'rb') as f:
+                    data_file = int(f.read())
+                    calc = data_file / len(info_files)
+                    f.close()
+                return Response(calc)
             else:
                 # Show Info:
                 with open('api/analyse_flags/result_analyse.dictionary', 'rb') as config_dictionary_file:
@@ -45,7 +52,15 @@ class CalculateSimilarity(APIView):
                 return Response(config_dictionary)
         else:
             if not os.path.exists("api/analyse_flags/result_analyse.dictionary"):
-                return Response("processing")
+                with open('api/analyse_flags/processing-lock.txt', 'rb') as f:
+                    data_file = int(f.read())
+                    dits = dict(data.lists())
+                    files = dits.get('file')
+
+                    calc = data_file / len(files)
+                    f.close()
+
+                return Response(calc)
             else:
                 # Show Info:
                 with open('api/analyse_flags/result_analyse.dictionary', 'rb') as config_dictionary_file:
@@ -71,6 +86,12 @@ class GeneratePDF(APIView):
         return response
 
 
+class CleanFiles(APIView):
+    def post(self, request, format=None):
+        delete_flags()
+        return Response("ok")
+
+
 class ThreadLong(threading.Thread):
     def __init__(self, group=None, target=None, data=None,
                  args=(), kwargs=None, verbose=None):
@@ -87,10 +108,22 @@ class ThreadLong(threading.Thread):
             pickle.dump(result_analyse, config_dictionary_file)
 
 
-class CleanFiles(APIView):
-    def post(self, request, format=None):
+class Example01(APIView):
+    def get(self, request, format=None):
+        with open('api/examples/example01/example01-result_analyse.dictionary', 'rb') as config_dictionary_file:
+            config_dictionary = pickle.load(config_dictionary_file)
+
         delete_flags()
-        return Response("ok")
+        return Response(config_dictionary)
+
+
+class Example02(APIView):
+    def get(self, request, format=None):
+        with open('api/examples/example02/example02-result_analyse.dictionary', 'rb') as config_dictionary_file:
+            config_dictionary = pickle.load(config_dictionary_file)
+
+        delete_flags()
+        return Response(config_dictionary)
 
 
 def delete_flags():
