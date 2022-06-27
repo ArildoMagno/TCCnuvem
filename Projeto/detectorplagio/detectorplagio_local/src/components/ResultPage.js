@@ -85,7 +85,7 @@ export default class ResultPage extends Component {
                             borderRadius: 35,
                             backgroundColor: "#92A8D1",
                             padding: "18px 36px",
-                            fontSize: "22px",
+                            fontSize: "18px",
                             margin: "0 auto",
                             fontFamily: "Helvetica"
                         }}

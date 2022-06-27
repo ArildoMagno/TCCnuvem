@@ -7,17 +7,7 @@ import {Component} from "react";
 import ReactEcharts from "echarts-for-react";
 
 
-// //Chart style
-// const style = {
-//     height: "400px",
-//     width: "600px",
-//     animation: true,
-// };
-// const style_echarts = {
-//     minHeight: "550px",
-//     width: "1200px",
-//     animation: true,
-// };
+
 const style_echarts = {
     height: "80vh",
     width: "100%",

@@ -8,13 +8,11 @@ import Typography from '@mui/material/Typography';
 import Button from "@mui/material/Button";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
-import CardMedia from "@mui/material/CardMedia";
+
 
 //Local Imgs
-import ExtractContentDocument from './images/extract_content_document.jpg';
-import SegmentationDocument from './images/segmentation_doc.jpg';
-import CompareSentences from './images/compare_sentences.jpg';
 import DocumentImg from './images/document_img.png';
+import ExplainMethod from './images/exemplo_main.png';
 import {Component} from "react";
 import axios from "axios";
 import {Redirect} from "react-router-dom";
@@ -86,6 +84,13 @@ const example02 = [
 
 const theme = createTheme();
 
+
+const style_image = {
+    display: "block",
+    marginLeft: "auto",
+    marginRight: "auto",
+    width: "50%"
+}
 
 export default class Main extends Component {
     constructor(props) {
@@ -199,15 +204,6 @@ export default class Main extends Component {
                         <div style={{paddingBottom: "15vh"}}>
                             <Card sx={{display: 'flex'}}>
                                 <CardContent sx={{flex: 1}}>
-                                    <Typography
-                                        component="h3"
-                                        variant="h3"
-                                        align="center"
-                                        color="text.primary"
-                                        gutterBottom
-                                    >
-                                        Como Funciona
-                                    </Typography>
 
                                     <Grid container>
 
@@ -227,63 +223,7 @@ export default class Main extends Component {
 
                                     <div>
 
-                                        <Typography variant="h5" gutterBottom
-                                                    style={{paddingTop: "5vh", paddingLeft: "15vh"}}>
-                                            Extração do conteúdo dos arquivos
-                                        </Typography>
-
-                                        <Grid style={{display: 'flex', justifyContent: 'center'}}>
-                                            <CardMedia
-                                                src={ExtractContentDocument}
-                                                component="img"
-                                                title="Some title"
-                                                sx={{width: "70vh", display: {xs: 'none', sm: 'block'}}}
-                                            />
-                                        </Grid>
-                                        <Typography variant="h6" align="center" color="text.secondary" paragraph
-                                                    paddingTop="2vh">
-                                            O conteúdo dos arquivos enviados é extraído.
-                                        </Typography>
-
-
-                                        <Typography variant="h5" gutterBottom
-                                                    style={{paddingTop: "5vh", paddingLeft: "15vh"}}>
-                                            Segmentação do conteúdo dos arquivos
-                                        </Typography>
-                                        <Grid style={{display: 'flex', justifyContent: 'center'}}>
-                                            <CardMedia
-                                                src={SegmentationDocument}
-                                                component="img"
-                                                title="Some title"
-                                                sx={{width: "70vh", display: {xs: 'none', sm: 'block'}}}
-                                            />
-                                        </Grid>
-                                        <Typography variant="h6" align="center" color="text.secondary" paragraph
-                                                    paddingTop="2vh">
-                                            Com o conteúdo dos arquivos é gerado uma lista de suas sentenças.
-                                        </Typography>
-
-
-                                        <Typography variant="h5" gutterBottom
-                                                    style={{paddingTop: "5vh", paddingLeft: "15vh"}}>
-                                            Análise das sentenças
-                                        </Typography>
-                                        <Grid style={{display: 'flex', justifyContent: 'center'}}>
-                                            <CardMedia
-
-                                                src={CompareSentences}
-                                                component="img"
-                                                title="Some title"
-                                                sx={{width: "65vh", display: {xs: 'none', sm: 'block'}}}
-                                            />
-                                        </Grid>
-
-                                        <Typography variant="h6" align="center" color="text.secondary" paragraph
-                                                    paddingTop="1vh">
-                                            Todas as sentenças dos arquivos são analisadas entre si, assim gerando
-                                            a similaridade entre os arquivos.
-                                        </Typography>
-
+                                        <img src={ExplainMethod} alt="Ilustração do Processo" style={style_image}/>;
 
                                     </div>
 
@@ -295,17 +235,6 @@ export default class Main extends Component {
 
                         <Card sx={{display: 'flex'}}>
                             <CardContent sx={{flex: 1}}>
-
-
-                                <Typography
-                                    component="h3"
-                                    variant="h3"
-                                    align="center"
-                                    color="text.primary"
-                                    gutterBottom
-                                >
-                                    Exemplos
-                                </Typography>
 
 
                                 <Grid item xs={12} md={6} style={{paddingBottom: "10vh"}}>
@@ -345,7 +274,8 @@ export default class Main extends Component {
                                                                 borderRadius: 15,
                                                                 backgroundColor: "#92A8D1",
                                                                 padding: "12px 26px",
-                                                                fontSize: "12px"
+                                                                fontSize: "12px",
+                                                                fontFamily: "Helvetica"
                                                             }}
                                                         > Analisar </Button>
                                                     }
@@ -400,7 +330,8 @@ export default class Main extends Component {
                                                             borderRadius: 15,
                                                             backgroundColor: "#92A8D1",
                                                             padding: "12px 26px",
-                                                            fontSize: "12px"
+                                                            fontSize: "12px",
+                                                            fontFamily: "Helvetica"
                                                         }}
                                                     > Analisar </Button>
                                                 }

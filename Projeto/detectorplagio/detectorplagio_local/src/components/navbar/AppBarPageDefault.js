@@ -14,8 +14,8 @@ export default class AppBarPageDefault extends Component {
         super(props);
 
         this.state = {
-            opacity_home: 0.7,
-            opacity_example: 0.7,
+            opacity_home: 1,
+            opacity_example: 1,
 
             anchorEl: null,
             anchorOriginVertical: 'bottom',
@@ -33,25 +33,25 @@ export default class AppBarPageDefault extends Component {
 
     mouse_hover_color_home() {
 
-        this.setState({opacity_home: 1})
+        this.setState({opacity_home: 0.7})
 
     }
 
     mouse_leave_color_home() {
 
-        this.setState({opacity_home: 0.7})
+        this.setState({opacity_home: 1})
 
     }
 
     mouse_hover_color_example() {
 
-        this.setState({opacity_example: 1})
+        this.setState({opacity_example: 0.7})
 
     }
 
     mouse_leave_color_example() {
 
-        this.setState({opacity_example: 0.7})
+        this.setState({opacity_example: 1})
 
     }
 
@@ -98,14 +98,14 @@ export default class AppBarPageDefault extends Component {
                                     component="a"
                                     style={{width: "100%"}}
                                     onClick={this.handleClose}
-                                > HOME </MenuItem> <br/>
+                                > home </MenuItem> <br/>
 
                                 <MenuItem
                                     href="/examples"
                                     component="a"
                                     style={{width: "100%"}}
                                     onClick={this.handleClose}
-                                > EXAMPLES </MenuItem> <br/>
+                                > exemplos </MenuItem> <br/>
 
                             </Menu>
 
@@ -129,7 +129,7 @@ export default class AppBarPageDefault extends Component {
                                 opacity: this.state.opacity_home
                             }}
                         >
-                            HOME
+                            home
                         </Typography>
 
 
@@ -151,7 +151,7 @@ export default class AppBarPageDefault extends Component {
                                 opacity: this.state.opacity_example
                             }}
                         >
-                            EXEMPLOS
+                            exemplos
                         </Typography>
 
                     </Toolbar>
