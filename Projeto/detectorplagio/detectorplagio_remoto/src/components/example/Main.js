@@ -42,8 +42,8 @@ const example02 = [
         title: 'Documento01',
         type: 'txt',
         description:
-            'O processo de procura de um emprego pode ser muito estressante, mas não precisa ser.' +
-            'Comece com um currículo bem escrito que tenha palavras-chave apropriadas para sua ocupação. ' +
+            'O processo de procura de um emprego pode ser muito estressante, mas não precisa ser. ' +
+            'Comece com um currículo bem escrito que tenha palavras-chave apropriadas para sua ocupação.' +
             'Em seguida, realize uma busca de emprego direcionada para cargos que atendam às suas necessidades.',
         image: DocumentImg,
     },
@@ -62,11 +62,10 @@ const example02 = [
         title: 'Documento03',
         type: 'docx',
         description:
-            'Segundo uma pesquisa realizada pelo linkedin, a maioria de seus usuários estão insatisfeitos com seus empregos, entretanto' +
-            'procurar um emprego pode ser muito estressante, mas não precisa ser.' +
-            'Comece escrevendo um bom currículo com palavras-chave apropriadas para sua ocupação.' +
-            'Em segundo lugar, direcione sua busca de emprego para cargos que correspondam às suas necessidades.' +
-            'O que pode levar a pessoas a desistir do seu objetivo.',
+            'Segundo uma pesquisa realizada pelo linkedin, a maioria de seus usuários estão insatisfeitos com seus empregos, ' +
+            'entretanto, procurar um emprego pode ser muito estressante. O que pode levar a pessoas a desistir do seu objetivo. ' +
+            'Comece escrevendo um bom currículo com palavras-chave apropriadas para sua ocupação. ' +
+            'Em segundo lugar, direcione sua busca de emprego para cargos que correspondam às suas necessidades.',
         image: DocumentImg,
 
     },
@@ -74,8 +73,9 @@ const example02 = [
         title: 'Documento04',
         type: 'txt',
         description:
-            'A busca por um emprego pode ser muito estressante. Comece com um currículo bem escrito.' +
-            'E realize uma procura de ocupação direcionada para cargos que atendam a sua carência.',
+            'Procurar por um emprego pode ser muito estressante. O que pode levar a pessoas a abandonar seu objetivo.' +
+            'Comece com um currículo bem escrito com palavras-chave apropriadas para sua ocupação.' +
+            'E realize uma procura de ocupação direcionada para cargos que atendam a sua carência. ',
         image: DocumentImg,
 
     }
