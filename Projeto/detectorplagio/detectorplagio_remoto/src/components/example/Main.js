@@ -12,7 +12,7 @@ import CardContent from "@mui/material/CardContent";
 
 //Local Imgs
 import DocumentImg from './images/document_img.png';
-import ExplainMethod from './images/exemplo_main.png';
+import ExplainMethod from './images/exemplo_main_img.png';
 import {Component} from "react";
 import axios from "axios";
 import {Redirect} from "react-router-dom";
