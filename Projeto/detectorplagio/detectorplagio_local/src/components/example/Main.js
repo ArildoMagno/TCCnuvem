@@ -223,7 +223,7 @@ export default class Main extends Component {
 
                                     <div>
 
-                                        <img src={ExplainMethod} alt="Ilustração do Processo" style={style_image}/>;
+                                        <img src={ExplainMethod} alt="Ilustração do Processo" style={style_image}/>
 
                                     </div>
 
