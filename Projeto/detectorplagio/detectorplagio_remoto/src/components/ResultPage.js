@@ -42,7 +42,7 @@ export default class ResultPage extends Component {
     generate_pdf(result) {
 
         // Local:
-        // let location = "http://127.0.0.1:8000/api/generate-pdf"// Remoto:
+        // let location = "http://127.0.0.1:8000/api/generate-pdf"
         // Remoto:
         let location = "/api/generate-pdf"
         axios({
