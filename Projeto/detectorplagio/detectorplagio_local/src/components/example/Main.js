@@ -12,7 +12,6 @@ import CardContent from "@mui/material/CardContent";
 
 //Local Imgs
 import DocumentImg from './images/document_img.png';
-import ExplainMethod from './images/exemplo_main_img.png';
 import {Component} from "react";
 import axios from "axios";
 import {Redirect} from "react-router-dom";
@@ -85,15 +84,6 @@ const example02 = [
 
 
 const theme = createTheme();
-
-
-const style_image = {
-    display: "block",
-    marginLeft: "auto",
-    marginRight: "auto",
-    width: "50%"
-}
-
 export default class Main extends Component {
     constructor(props) {
         super(props);
@@ -203,37 +193,6 @@ export default class Main extends Component {
                     <div style={{paddingTop: "10vh", paddingBottom: "5vh"}}>
 
 
-                        <div style={{paddingBottom: "15vh"}}>
-                            <Card sx={{display: 'flex'}}>
-                                <CardContent sx={{flex: 1}}>
-
-                                    <Grid container>
-
-
-                                        <Typography variant="h6" align="center" color="text.secondary" paragraph
-                                                    textAlign={"justify"} paddingLeft={"13vh"} paddingRight={"13vh"}>
-                                            O sistema recebe arquivos nos formatos (pdf,txt,docx)
-                                            e extrai o texto dos arquivos.
-                                            Uma vez com o texto extraído é realizado a etapa de segmentação
-                                            onde o texto é dividido em várias sentenças.
-                                            Análises sobre a similaridade das sentenças são feitas,
-                                            por fim, gerando a similaridade entre os arquivos.
-                                        </Typography>
-
-
-                                    </Grid>
-
-                                    <div>
-
-                                        <img src={ExplainMethod} alt="Ilustração do Processo" style={style_image}/>
-
-                                    </div>
-
-
-                                </CardContent>
-                            </Card>
-                        </div>
-
 
                         <Card sx={{display: 'flex'}}>
                             <CardContent sx={{flex: 1}}>
@@ -244,11 +203,11 @@ export default class Main extends Component {
                                     <Card sx={{display: 'flex'}}>
                                         <CardContent sx={{flex: 1}}>
                                             <div>
-                                                <Typography variant="h4" gutterBottom>
+                                                <Typography variant="h4" gutterBottom style={{fontFamily: "roboto"}}>
                                                     Exemplo 01
                                                 </Typography>
 
-                                                <div style={{paddingTop: "2vh", paddingBottom: "2vh"}}>
+                                                <div style={{paddingTop: "2vh", paddingBottom: "2vh", fontFamily: "chivo"}}>
                                                     <Grid container spacing={4}>
                                                         {example01.map((post, index) => (
                                                             <FeaturedPost key={index} post={post}/>
@@ -256,7 +215,7 @@ export default class Main extends Component {
                                                     </Grid>
                                                 </div>
 
-                                                <div style={{textAlign: "center", paddingTop: "5vh"}}>
+                                                <div style={{textAlign: "center", paddingTop: "5vh", fontFamily: "chivo"}}>
                                                     <Typography variant="h6" gutterBottom>
                                                         Para executar sua análise basta clicar em analisar
                                                     </Typography>
@@ -274,10 +233,11 @@ export default class Main extends Component {
                                                             disabled={this.state.loading_example02}
                                                             style={{
                                                                 borderRadius: 15,
-                                                                backgroundColor: "#92A8D1",
+                                                                backgroundColor: "#DBD35E",
                                                                 padding: "12px 26px",
                                                                 fontSize: "12px",
-                                                                fontFamily: "Helvetica"
+                                                                fontFamily: "monospace",
+                                                                color: "black"
                                                             }}
                                                         > Analisar </Button>
                                                     }
@@ -299,12 +259,12 @@ export default class Main extends Component {
                                         <CardContent sx={{flex: 1}}>
 
 
-                                            <Typography variant="h4" gutterBottom>
+                                            <Typography variant="h4" gutterBottom style={{fontFamily: "roboto"}}>
                                                 Exemplo 02
                                             </Typography>
 
 
-                                            <div style={{paddingTop: "2vh", paddingBottom: "2vh"}}>
+                                            <div style={{paddingTop: "2vh", paddingBottom: "2vh", fontFamily: "chivo"}}>
                                                 <Grid container spacing={4}>
                                                     {example02.map((post, index) => (
                                                         <FeaturedPost key={index} post={post}/>
@@ -313,7 +273,7 @@ export default class Main extends Component {
                                             </div>
 
 
-                                            <div style={{textAlign: "center", paddingTop: "5vh"}}>
+                                            <div style={{textAlign: "center", paddingTop: "5vh", fontFamily: "chivo"}}>
                                                 <Typography variant="h6" gutterBottom>
                                                     Para executar sua análise basta clicar em analisar
                                                 </Typography>
@@ -330,10 +290,11 @@ export default class Main extends Component {
                                                         disabled={this.state.loading_example01}
                                                         style={{
                                                             borderRadius: 15,
-                                                            backgroundColor: "#92A8D1",
+                                                            backgroundColor: "#DBD35E",
                                                             padding: "12px 26px",
                                                             fontSize: "12px",
-                                                            fontFamily: "Helvetica"
+                                                            fontFamily: "monospace",
+                                                            color: "black"
                                                         }}
                                                     > Analisar </Button>
                                                 }

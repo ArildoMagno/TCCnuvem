@@ -2,10 +2,10 @@ import React, {Component} from "react";
 import AppBarPageDefault from "./navbar/AppBarPageDefault";
 import Grid from '@mui/material/Grid';
 import {createTheme} from '@mui/material/styles';
-import Button from "@mui/material/Button";
 import CssBaseline from "@mui/material/CssBaseline";
 import axios from "axios";
 import Graph from "./resultpage/Graph";
+import Typography from "@mui/material/Typography";
 
 
 createTheme();
@@ -79,21 +79,31 @@ export default class ResultPage extends Component {
                     <Grid item xs={12} sm={12} md={12} lg={12}></Grid>
 
 
-                    <Button
-                        variant="contained"
-                        style={{
-                            borderRadius: 35,
-                            backgroundColor: "#92A8D1",
-                            padding: "18px 36px",
-                            fontSize: "18px",
-                            margin: "0 auto",
-                            fontFamily: "Helvetica"
-                        }}
+
+                    <Typography
+                        variant="h6"
+                        noWrap
+                        component="a"
+                        href="#/"
 
                         onClick={() => this.handle_submit()}
+                        sx={{
+                            mr: 2,
+                            fontFamily: 'monospace',
+                            fontWeight: 700,
+                            color: 'white',
+                            textDecoration: 'none',
+                            backgroundColor: "black",
+                            borderRadius: '2vw',
+                            padding: "18px 36px",
+                            alignContent: "center",
+                            margin: "0 auto"
+                        }}
                     >
                         Gerar Relatorio
-                    </Button>
+                    </Typography>
+
+
 
                 </Grid>
 

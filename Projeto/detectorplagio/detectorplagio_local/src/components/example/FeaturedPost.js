@@ -13,13 +13,13 @@ function FeaturedPost(props) {
 
             <Card sx={{display: 'flex'}}>
                 <CardContent sx={{flex: 1}}>
-                    <Typography component="h2" variant="h5">
+                    <Typography component="h2" variant="h5" style={{fontFamily: "chivo"}}>
                         {post.title}
                     </Typography>
-                    <Typography variant="subtitle1" color="#e65a50">
+                    <Typography variant="subtitle1" color="#DB8A9F">
                         {post.type}
                     </Typography>
-                    <Typography variant="subtitle1" paragraph>
+                    <Typography variant="subtitle1" paragraph style={{fontFamily: "roboto"}}>
                         {post.description}
                     </Typography>
                 </CardContent>
