@@ -3,19 +3,45 @@ import Box from "@mui/material/Box";
 import Container from "@mui/material/Container";
 import Typography from "@mui/material/Typography";
 import Stack from "@mui/material/Stack";
-import Button from "@mui/material/Button";
 import {Redirect} from 'react-router-dom';
 
-import {Alert} from "@mui/material";
+import {Alert, Menu, MenuItem} from "@mui/material";
 import axios from "axios";
 
 import Loading from "./Loading"
+import Toolbar from "@mui/material/Toolbar";
+import IconButton from "@material-ui/core/IconButton";
+import MenuIcon from "@mui/icons-material/Menu";
+import AppBar from "@mui/material/AppBar";
+import ExplainMethod from "../example/images/exemplo_main_img.png";
+
+
+const style_image = {
+    display: "block",
+    marginLeft: "auto",
+    marginRight: "auto",
+    width: "30%",
+    paddingTop: "5vh",
+    paddingBottom: "5vh",
+}
 
 export default class Main extends Component {
     constructor(props) {
         super(props);
 
         this.state = {
+            // navbar:
+            opacity_home: 1,
+            opacity_example: 1,
+
+            anchorEl: null,
+            anchorOriginVertical: 'bottom',
+            anchorOriginHorizontal: 'right',
+            transformOriginVertical: 'top',
+            transformOriginHorizontal: 'right',
+            anchorReference: 'anchorEl',
+
+            // main:
             file: true,
             result_calc: Array,
             is_result_page_visible: false,
@@ -25,12 +51,54 @@ export default class Main extends Component {
             error_message_type_files: false,
             error_message_name_files: false,
             percentage: 0,
-        };
 
+
+        };
+        // main:
         this.calculate_similarity = this.calculate_similarity.bind(this);
         this.inputReference = React.createRef();
 
+        // navbar:
+        this.handleMenu = this.handleMenu.bind(this);
+        this.handleClose = this.handleClose.bind(this);
+
     }
+
+    // navbar:
+    mouse_hover_color_home() {
+
+        this.setState({opacity_home: 0.7})
+
+    }
+
+    mouse_leave_color_home() {
+
+        this.setState({opacity_home: 1})
+
+    }
+
+    mouse_hover_color_example() {
+
+        this.setState({opacity_example: 0.7})
+
+    }
+
+    mouse_leave_color_example() {
+
+        this.setState({opacity_example: 1})
+
+    }
+
+    handleMenu = event => {
+        this.setState({anchorEl: event.currentTarget});
+    };
+
+
+    handleClose = () => {
+        this.setState({anchorEl: null});
+    };
+
+    // main:
 
     file_upload_action = () => {
         this.inputReference.current.click();
@@ -154,89 +222,231 @@ export default class Main extends Component {
 
 
     render() {
+        const {anchorEl} = this.state;
+        const open = Boolean(anchorEl);
+
 
         return (
 
             <main>
+                {/*NAVBAR*/}
+                <AppBar position="static" style={{background: '#75C3DC'}}>
 
-                {/* Hero unit */}
-                <Box
-                    sx={{
-                        bgcolor: 'background.paper',
-                        pt: 8,
-                        pb: 6,
-                    }}
-                >
-                    <Container maxWidth="sm">
+                    <Toolbar disableGutters style={{paddingLeft: "5vw", paddingRight: "5vw"}}>
+                        <Box sx={{flexGrow: 1, display: {xs: 'flex', md: 'none'}}}>
+                            <IconButton
+                                aria-owns={open ? 'menu-appbar' : null}
+                                onClick={this.handleMenu}
+                            >
+                                <MenuIcon/>
+                            </IconButton>
+
+                            <Menu
+                                id="menu-appbar"
+                                anchorEl={anchorEl}
+                                anchorOrigin={{vertical: "bottom", horizontal: "center"}}
+                                transformOrigin={{vertical: "top", horizontal: "center"}}
+                                open={open}
+                                onClose={this.handleClose}
+                            >
+
+                                <MenuItem
+                                    href="/"
+                                    component="a"
+                                    style={{width: "100%"}}
+                                    onClick={this.handleClose}
+                                > home </MenuItem> <br/>
+
+                                <MenuItem
+                                    href="/examples"
+                                    component="a"
+                                    style={{width: "100%"}}
+                                    onClick={this.handleClose}
+                                > exemplos </MenuItem> <br/>
+
+                            </Menu>
+
+                        </Box>
+
+
                         <Typography
-                            component="h1"
-                            variant="h2"
-                            align="center"
-                            color="text.primary"
-                            gutterBottom
+                            variant="h6"
+                            noWrap
+                            component="a"
+                            href="/"
+                            onMouseEnter={() => this.mouse_hover_color_home()}
+                            onMouseLeave={() => this.mouse_leave_color_home()}
+                            sx={{
+                                mr: 2,
+                                display: {xs: 'none', md: 'flex'},
+                                fontFamily: 'roboto',
+                                color: 'white',
+                                textDecoration: 'none',
+                                opacity: this.state.opacity_home,
+
+                            }}
                         >
-                            Detector de Plágio
+                            Home
                         </Typography>
 
 
-                        <Typography variant="h5" align="center" color="text.secondary" paragraph>
-                            Detectamos o plágio até mesmo quando há troca
-                            das palavras por sinônimos.
-                        </Typography>
-                        <br/>
-                        <Typography variant="h6" align="center" color="text.secondary" paragraph>
-                            Envie os arquivos que deseja analisar.
-                        </Typography>
-
-
-                        {this.state.error_message_number_files &&
-                            <Alert severity="error">Envie mais de um arquivo!</Alert>}
-                        {this.state.error_message_type_files &&
-                            <Alert severity="error">Tipos de arquivos aceitos: txt, pdf, docx!</Alert>}
-                        {this.state.error_message_name_files &&
-                            <Alert severity="error">Envie arquivos com nomes distintos!</Alert>}
-
-                        <Stack
-                            sx={{pt: 4}}
-                            direction="row"
-                            spacing={1}
-                            justifyContent="center"
+                        <Typography
+                            variant="h6"
+                            noWrap
+                            component="a"
+                            href="/examples"
+                            onMouseEnter={() => this.mouse_hover_color_example()}
+                            onMouseLeave={() => this.mouse_leave_color_example()}
+                            sx={{
+                                mr: 2,
+                                display: {xs: 'none', md: 'flex'},
+                                fontFamily: 'roboto',
+                                color: 'white',
+                                textDecoration: 'none',
+                                opacity: this.state.opacity_example,
+                                flexGrow: 1
+                            }}
                         >
+                            Exemplos
+                        </Typography>
 
 
-                            <input
-                                type="file"
-                                id="file"
-                                name="file"
-                                multiple
-                                hidden
-                                ref={this.inputReference}
-                                onChange={this.handle_click}/>
+                        <Typography
+                            variant="h6"
+                            noWrap
+                            component="a"
+                            href="#/"
+                            onClick={this.file_upload_action}
+                            sx={{
+                                mr: 2,
+                                display: {xs: 'none', md: 'flex'},
+                                fontFamily: 'monospace',
+                                fontWeight: 700,
+                                color: 'white',
+                                textDecoration: 'none',
+                                padding: 1.5,
+                                backgroundColor: "black",
+                                borderRadius: '2vw'
+                            }}
+                        >
+                            Analisar Arquivos
+                        </Typography>
 
 
-                            {this.state.loading ?
-                                <div align={"center"}>
-                                    <Loading percentage={this.state.percentage}/>
-                                </div>
-                                :
-                                <Button
-                                    onClick={this.file_upload_action}
-                                    variant="contained"
-                                    style={{
-                                        borderRadius: 35,
-                                        backgroundColor: "#92A8D1",
-                                        padding: "18px 36px",
-                                        fontSize: "18px"
-                                    }}
-                                > Enviar Arquivos </Button>
-                            }
+                    </Toolbar>
+
+                </AppBar>
+
+                <Container style={{paddingTop: "2vh"}}>
+                    {this.state.error_message_number_files &&
 
 
-                        </Stack>
+                        <Alert severity="warning">Envie mais de um arquivo!</Alert>
+                    }
+
+                    {this.state.error_message_type_files &&
+                        <Alert severity="error">Tipos de arquivos aceitos: txt, pdf, docx!</Alert>}
+                    {this.state.error_message_name_files &&
+                        <Alert severity="error">Envie arquivos com nomes distintos!</Alert>}
+
+                </Container>
 
 
-                    </Container>
-                </Box>
+                {this.state.loading ?
+                    <div align={"center"}>
+                        <Loading percentage={this.state.percentage}/>
+                    </div>
+                    :
+
+
+                    <Box
+                        sx={{
+                            bgcolor: 'background.paper',
+                            pt: 8,
+                            pb: 6,
+                        }}
+                    >
+
+
+                        <Container>
+
+
+                            <Typography
+                                component="h1"
+                                variant="h2"
+                                align="center"
+                                color="text.primary"
+                                gutterBottom
+                                sx={{
+
+                                    fontFamily: 'chivo',
+
+                                }}
+                            >
+                                Detector de Plágio
+                            </Typography>
+
+
+                            <Typography
+                                variant="h6"
+                                align="center"
+                                color="text.secondary"
+                                sx={{
+
+                                    fontFamily: 'lato',
+
+                                }}
+                            >
+                                Detectamos o plágio até mesmo quando há troca
+                                das palavras por sinônimos.
+                            </Typography>
+
+                            <div>
+
+                                <img src={ExplainMethod} alt="Ilustração do Processo" style={style_image}/>
+
+                            </div>
+
+
+                            <Typography
+                                component="h4"
+                                variant="h5"
+                                align="center"
+                                color="text.primary"
+                                gutterBottom
+                                sx={{
+
+                                    fontFamily: 'chivo',
+
+                                }}
+                            >
+                                Clique em <b>Analisar Arquivos</b> para enviar seus documentos.
+                            </Typography>
+
+
+                            <Stack
+                                sx={{pt: 4}}
+                                direction="row"
+                                spacing={1}
+                                justifyContent="center"
+                            >
+
+
+                                <input
+                                    type="file"
+                                    id="file"
+                                    name="file"
+                                    multiple
+                                    hidden
+                                    ref={this.inputReference}
+                                    onChange={this.handle_click}/>
+
+                            </Stack>
+
+
+                        </Container>
+                    </Box>
+                }
 
 
                 {this.state.is_result_page_visible ?

@@ -1,11 +1,6 @@
-/*
-eCharts examples -> https://ecomfe.github.io/echarts-examples/public/index.html
-*/
-
 import * as React from "react";
 import {Component} from "react";
 import ReactEcharts from "echarts-for-react";
-
 
 
 const style_echarts = {
@@ -40,6 +35,7 @@ export default class Graph extends Component {
                 type: "graph",
                 layout: 'circular',
                 symbolSize: 50,
+                color: "#3D7A8F",
                 label: {
                     show: true,
                     formatter: '{b}'
@@ -81,7 +77,7 @@ export default class Graph extends Component {
 
     manipulate_infos_graph() {
         let data = this.state.datafiles
-
+        let list_links = []
 
         for (let i = 0; i < data.length; i++) {
             let name_source = data[i].name_file_source
@@ -96,12 +92,19 @@ export default class Graph extends Component {
                 let name_dest = relation_file.name_file_dest
                 let similarity = relation_file.percent.toString()
                 name_dest = name_dest.substring(0, name_dest.indexOf('.'));
+                let new_element = [name_source, name_dest]
 
-                this.data_graph_links.push({
-                    source: name_source,
-                    target: name_dest,
-                    label: {show: true, formatter: similarity}
-                })
+
+                if (!this.verify_list_links(list_links, new_element)) {
+                    list_links.push(new_element)
+                    this.data_graph_links.push({
+                        source: name_source,
+                        target: name_dest,
+                        label: {show: true, formatter: similarity}
+                    })
+                }
+
+
             }
 
         }
@@ -112,6 +115,25 @@ export default class Graph extends Component {
     }
 
 
+    verify_list_links(list_links, new_element) {
+        let flag_equals = false
+        for (let i = 0; i < list_links.length; i++) {
+            let new_element_inverted_posi0 = new_element[0]
+            let new_element_inverted_posi1 = new_element[1]
+            let new_element_inverted = []
+            new_element_inverted[0] = new_element_inverted_posi1
+            new_element_inverted[1] = new_element_inverted_posi0
+
+            flag_equals = this.arraysEqual(list_links[i], new_element) || this.arraysEqual(list_links[i], new_element_inverted);
+        }
+        return flag_equals;
+
+    }
+
+    arraysEqual(a1, a2) {
+        return JSON.stringify(a1) === JSON.stringify(a2);
+    }
+
     render() {
         this.manipulate_infos_graph()
 
@@ -119,8 +141,7 @@ export default class Graph extends Component {
         return (
 
 
-
-                <ReactEcharts option={this.option} style={style_echarts}/>
+            <ReactEcharts option={this.option} style={style_echarts}/>
 
         );
     }
