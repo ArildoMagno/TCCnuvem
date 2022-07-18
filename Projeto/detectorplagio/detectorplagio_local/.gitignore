@@ -3,6 +3,9 @@
 #pakcage-lock
 package-lock.json
 
+# pycache
+__pycache__/
+
 # idea
 .idea
 

@@ -3,6 +3,9 @@
 # idea
 .idea
 
+# pycache
+__pycache__/
+
 # staticfiles
 staticfiles
 
