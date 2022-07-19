@@ -124,10 +124,12 @@ export default class Graph extends Component {
             new_element_inverted[0] = new_element_inverted_posi1
             new_element_inverted[1] = new_element_inverted_posi0
 
-            flag_equals = this.arraysEqual(list_links[i], new_element) || this.arraysEqual(list_links[i], new_element_inverted);
+            if (flag_equals === false) {
+                flag_equals = this.arraysEqual(list_links[i], new_element) || this.arraysEqual(list_links[i], new_element_inverted);
+            }
+
         }
         return flag_equals;
-
     }
 
     arraysEqual(a1, a2) {

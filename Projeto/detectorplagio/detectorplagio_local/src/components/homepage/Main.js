@@ -325,7 +325,7 @@ export default class Main extends Component {
                                 color: 'white',
                                 textDecoration: 'none',
                                 padding: 1.5,
-                                backgroundColor: "black",
+                                backgroundColor: "#353839",
                                 borderRadius: '2vw'
                             }}
                         >

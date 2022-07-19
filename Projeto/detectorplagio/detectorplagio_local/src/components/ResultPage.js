@@ -93,7 +93,7 @@ export default class ResultPage extends Component {
                             fontWeight: 700,
                             color: 'white',
                             textDecoration: 'none',
-                            backgroundColor: "black",
+                            backgroundColor: "#353839",
                             borderRadius: '2vw',
                             padding: "18px 36px",
                             alignContent: "center",

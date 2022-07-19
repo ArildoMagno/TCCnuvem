@@ -1,0 +1,30 @@
+WE CAN DELETE(DELETE FROM ....) THE INFORMATION FROM THIS TABLES:
+definitions = V
+pronunciations = V
+sense_relations = V
+synset_relations = V
+sense_synset_relations = V
+relation_types = V
+ilis = V
+ili_statuses = V
+synset_examples = V
+
+
+I JUST NEED THIS TABLES:
+FORMS -> ENTRIES -> SENSES -> SYNSETS
+
+
+TUTORIAL: 
+1- download the own-pt database:  wn.download('own-pt')
+2- go to directory of download: users/user/.wn_data
+3- edit the database remove the tables cited before.
+4- script to remove content dont necessary from the tables:
+	DELETE FROM definitions;
+	DELETE FROM pronunciations;
+	DELETE FROM sense_relations;
+	DELETE FROM synset_relations;
+	DELETE FROM sense_synset_relations;
+	DELETE FROM relation_types;
+	DELETE FROM ilis;
+	DELETE FROM ili_statuses;
+	DELETE FROM synset_examples;

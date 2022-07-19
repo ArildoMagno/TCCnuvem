@@ -168,7 +168,6 @@ export default class Main extends Component {
     }
 
     show_result_page(result) {
-        console.log("aqui que quebrou?2")
         this.setState({
             is_result_page_visible: true,
             result_calc: result
