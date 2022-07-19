@@ -170,9 +170,9 @@ export default class Main extends Component {
 
     clean_files() {
         // Local:
-        // let location = "http://127.0.0.1:8000/api/clean-files"
+        let location = "http://127.0.0.1:8000/api/clean-files"
         // Remoto:
-        let location = "/api/clean-files"
+        // let location = "/api/clean-files"
         axios.post(location)
     }
 
@@ -185,9 +185,9 @@ export default class Main extends Component {
             error_message_name_files: false
         })
         // Local:
-        // let location = "http://127.0.0.1:8000/api/calculate-similarity"
+        let location = "http://127.0.0.1:8000/api/calculate-similarity"
         // Remoto:
-        let location = "/api/calculate-similarity"
+        // let location = "/api/calculate-similarity"
         axios.post(location, data, {
             headers: {
                 'Content-Type': 'multipart/form-data'
@@ -325,7 +325,7 @@ export default class Main extends Component {
                                 color: 'white',
                                 textDecoration: 'none',
                                 padding: 1.5,
-                                backgroundColor: "black",
+                                backgroundColor: "#353839",
                                 borderRadius: '2vw'
                             }}
                         >

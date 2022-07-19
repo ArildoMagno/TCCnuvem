@@ -42,9 +42,9 @@ export default class ResultPage extends Component {
     generate_pdf(result) {
 
         // Local:
-        // let location = "http://127.0.0.1:8000/api/generate-pdf"// Remoto:
+        let location = "http://127.0.0.1:8000/api/generate-pdf"// Remoto:
         // Remoto:
-        let location = "/api/generate-pdf"
+        // let location = "/api/generate-pdf"
         axios({
             url: location, //your url
             method: 'POST',
@@ -93,7 +93,7 @@ export default class ResultPage extends Component {
                             fontWeight: 700,
                             color: 'white',
                             textDecoration: 'none',
-                            backgroundColor: "black",
+                            backgroundColor: "#353839",
                             borderRadius: '2vw',
                             padding: "18px 36px",
                             alignContent: "center",

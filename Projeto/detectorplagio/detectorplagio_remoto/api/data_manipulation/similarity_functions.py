@@ -115,7 +115,7 @@ class Similarity:
 
     def sentences_similar_threshold(self, uAB, uBA):
         # calculo secao 4.3.3
-        p = 0.73
+        p = 0.5
         if min(uAB, uBA) >= p:
             return True
         else:
