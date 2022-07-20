@@ -1,5 +1,7 @@
-
+# Env
 Projeto/detectorplagio/envdetectorplagio
 
-
+# IDE
 Projeto/detectorplagio/detectorplagio_remoto/.idea
+Projeto/detectorplagio/detectorplagio_local/.idea
+Projeto/.idea
