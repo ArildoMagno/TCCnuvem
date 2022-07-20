@@ -109,9 +109,9 @@ export default class Main extends Component {
 
         this.clean_files()
         // Local:
-        let location = "http://127.0.0.1:8000/api/example01"
+        // let location = "http://127.0.0.1:8000/api/example01"
         // Remoto:
-        // let location = "/api/example01"
+        let location = "/api/example01"
         axios.get(location)
             .then((response) => {
                     setTimeout(
@@ -140,9 +140,9 @@ export default class Main extends Component {
 
         this.clean_files()
         // Local:
-        let location = "http://127.0.0.1:8000/api/example02"
+        // let location = "http://127.0.0.1:8000/api/example02"
         // Remoto:
-        // let location = "/api/example02"
+        let location = "/api/example02"
         axios.get(location)
             .then((response) => {
                     setTimeout(
@@ -176,9 +176,9 @@ export default class Main extends Component {
 
     clean_files() {
         // Local:
-        let location = "http://127.0.0.1:8000/api/clean-files"
+        // let location = "http://127.0.0.1:8000/api/clean-files"
         // Remoto:
-        // let location = "/api/clean-files"
+        let location = "/api/clean-files"
         axios.post(location)
     }
 
