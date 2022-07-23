@@ -50,6 +50,7 @@ export default class Main extends Component {
             error_message_number_files: false,
             error_message_type_files: false,
             error_message_name_files: false,
+            error_process_files: false,
             percentage: 0,
 
 
@@ -125,8 +126,8 @@ export default class Main extends Component {
                     this.calculate_similarity(values_data)
                 }
             });
-        } catch (e) {
-            console.error(e);
+        } catch (error) {
+            console.log("ERRO ATUA AQUI2", error)
         }
     };
 
@@ -214,12 +215,18 @@ export default class Main extends Component {
                 }
             )
             .catch(error => {
-                console.log(error)
+                this.error_occurred()
             })
 
 
     }
 
+    error_occurred() {
+        if (this.state.error_process_files === false) {
+            this.setState({error_process_files: true})
+            this.setState({loading: false})
+        }
+    }
 
     render() {
         const {anchorEl} = this.state;
@@ -338,16 +345,17 @@ export default class Main extends Component {
                 </AppBar>
 
                 <Container style={{paddingTop: "2vh"}}>
-                    {this.state.error_message_number_files &&
-
-
-                        <Alert severity="warning">Envie mais de um arquivo!</Alert>
+                    {this.state.error_process_files &&
+                        <Alert severity="error">Ocorreu um erro ao processar seus arquivos, tente novamente!</Alert>
                     }
 
+                    {this.state.error_message_number_files &&
+                        <Alert severity="warning">Envie mais de um arquivo!</Alert>
+                    }
                     {this.state.error_message_type_files &&
-                        <Alert severity="error">Tipos de arquivos aceitos: txt, pdf, docx!</Alert>}
+                        <Alert severity="warning">Tipos de arquivos aceitos: txt, pdf, docx!</Alert>}
                     {this.state.error_message_name_files &&
-                        <Alert severity="error">Envie arquivos com nomes distintos!</Alert>}
+                        <Alert severity="warning">Envie arquivos com nomes distintos!</Alert>}
 
                 </Container>
 
