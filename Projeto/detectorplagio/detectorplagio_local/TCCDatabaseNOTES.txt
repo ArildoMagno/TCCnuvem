@@ -1,8 +1,6 @@
 WE CAN DELETE(DELETE FROM ....) THE INFORMATION FROM THIS TABLES:
 definitions = V
 pronunciations = V
-sense_relations = V
-synset_relations = V
 sense_synset_relations = V
 relation_types = V
 ilis = V
