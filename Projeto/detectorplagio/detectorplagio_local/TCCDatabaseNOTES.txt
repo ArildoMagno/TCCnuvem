@@ -21,8 +21,6 @@ TUTORIAL:
 4- script to remove content dont necessary from the tables:
 	DELETE FROM definitions;
 	DELETE FROM pronunciations;
-	DELETE FROM sense_relations;
-	DELETE FROM synset_relations;
 	DELETE FROM sense_synset_relations;
 	DELETE FROM relation_types;
 	DELETE FROM ilis;
